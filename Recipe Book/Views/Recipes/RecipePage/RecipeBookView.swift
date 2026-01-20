@@ -12,14 +12,13 @@ struct RecipeBookView: View {
     let bookTitle: String
 
     var body: some View {
-        TabView {
-            ForEach(0..<6, id: \.self) { index in
+        PageCurlView(
+            pages: (0..<5).map { index in
                 RecipePageView(recipeIndex: index)
-                    .padding(.horizontal)
             }
-        }
-        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+        )
         .navigationBarTitle(bookTitle, displayMode: .inline)
+        .ignoresSafeArea()
     }
 }
 
