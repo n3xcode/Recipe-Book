@@ -8,13 +8,25 @@
 import SwiftUI
 
 struct RecipeBookRowView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
 
-struct RecipeBookRowView_Previews: PreviewProvider {
-    static var previews: some View {
-        RecipeBookRowView()
+    let title: String
+    let recipeCount: Int
+
+    var body: some View {
+        HStack(spacing: 16) {
+            Image(systemName: "book.fill")
+                .font(.title2)
+                .foregroundColor(.accentColor)
+
+            VStack(alignment: .leading) {
+                Text(title)
+                    .font(.headline)
+
+                Text("\(recipeCount) recipes")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .padding(.vertical, 8)
     }
 }

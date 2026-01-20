@@ -19,7 +19,7 @@ struct RootView: View {
             }
 
             NavigationView {
-                MyRecipesView()
+                SavedRecipesView()
             }
             .tabItem {
                 Label("My Recipes", systemImage: "book.fill")

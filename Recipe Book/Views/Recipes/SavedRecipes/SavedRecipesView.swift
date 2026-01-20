@@ -8,13 +8,29 @@
 import SwiftUI
 
 struct SavedRecipesView: View {
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List {
+            Section(header: Text("My Recipe Books")) {
+                ForEach(0..<3, id: \.self) { index in
+                    NavigationLink {
+                        RecipeBookView(bookTitle: "Book \(index + 1)")
+                    } label: {
+                        RecipeBookRowView(title: "Book \(index + 1)",
+                                          recipeCount: 5 + index)
+                    }
+                }
+            }
+        }
+        .listStyle(InsetGroupedListStyle())
+        .navigationBarTitle("My Recipes", displayMode: .large)
     }
 }
 
 struct SavedRecipesView_Previews: PreviewProvider {
     static var previews: some View {
-        SavedRecipesView()
+        NavigationView {
+            SavedRecipesView()
+        }
     }
 }

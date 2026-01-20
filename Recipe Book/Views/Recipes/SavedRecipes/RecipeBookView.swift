@@ -8,13 +8,25 @@
 import SwiftUI
 
 struct RecipeBookView: View {
+
+    let bookTitle: String
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        TabView {
+            ForEach(0..<6, id: \.self) { index in
+                RecipePageView(recipeIndex: index)
+                    .padding(.horizontal)
+            }
+        }
+        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+        .navigationBarTitle(bookTitle, displayMode: .inline)
     }
 }
 
 struct RecipeBookView_Previews: PreviewProvider {
     static var previews: some View {
-        RecipeBookView()
+        NavigationView {
+            RecipeBookView(bookTitle: "My Favorites")
+        }
     }
 }
