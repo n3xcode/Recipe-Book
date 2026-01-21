@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ProfileView: View {
 
+    //@EnvironmentObject var env: AppEnvironment
+    
     // TEMP state placeholders
     @State private var dietaryPreferences = DietaryPreferenceOptions.none
     @State private var useMetricUnits = true
