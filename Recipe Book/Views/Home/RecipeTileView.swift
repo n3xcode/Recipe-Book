@@ -8,34 +8,56 @@
 import SwiftUI
 
 struct RecipeTileView: View {
+
+    let title: String
+    let subtitle: String
+    let imageName: String?   // later this becomes a URL
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
 
-            Rectangle()
-                .fill(Color.gray.opacity(0.3))
-                .frame(height: 120)
-                .cornerRadius(12)
-                .overlay(
+            ZStack {
+                Rectangle()
+                    .fill(Color.gray.opacity(0.3))
+                    .frame(height: 120)
+                    .cornerRadius(12)
+
+                if let imageName = imageName {
+                    Image(imageName)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(height: 120)
+                        .clipped()
+                        .cornerRadius(12)
+                } else {
                     Image(systemName: "photo")
                         .font(.largeTitle)
                         .foregroundColor(.secondary)
-                )
+                }
+            }
 
-            Text("Recipe Title")
+            Text(title)
                 .font(.headline)
                 .lineLimit(2)
 
-            Text("Quick description or category")
+            Text(subtitle)
                 .font(.caption)
                 .foregroundColor(.secondary)
+                .lineLimit(1)
         }
     }
 }
 
+
 struct RecipeTileView_Previews: PreviewProvider {
     static var previews: some View {
-        RecipeTileView()
-            .padding()
-            .previewLayout(.sizeThatFits)
+        RecipeTileView(
+            title: "Creamy Garlic Pasta",
+            subtitle: "Italian • 30 min",
+            imageName: nil
+        )
+        .padding()
+        .previewLayout(.sizeThatFits)
     }
 }
+
