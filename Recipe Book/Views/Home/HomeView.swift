@@ -9,18 +9,23 @@ import SwiftUI
 
 struct HomeView: View {
     
+    @StateObject private var viewModle = HomePageRecipeViewModel()
+    @State private var randomMeal: GetHomePageRecipes?
     @State private var searchText: String = ""
     
-    let mealsOfTheDay: [HomeMealTile] = [
-        HomeMealTile(title: "Pasta", thumbnail: "pasta", query: "pasta"),
-        HomeMealTile(title: "Chicken", thumbnail: "chicken", query: "chicken"),
-        HomeMealTile(title: "Seafood", thumbnail: "seafood", query: "seafood"),
-        HomeMealTile(title: "Dessert", thumbnail: "dessert", query: "dessert")
-    ]
+    
     
     var body: some View {
         
         NavigationView {
+            
+            let mealsOfTheDay: [HomeMealTile] = [
+                HomeMealTile(title: randomMeal?.strMeal ?? "Random Meal", thumbnail: randomMeal?.strMealThumb ?? "", subtitle: "Feeling Lucky?"),
+                HomeMealTile(title: "Chicken", thumbnail: "chicken", subtitle: "chicken"),
+                HomeMealTile(title: "Seafood", thumbnail: "seafood", subtitle: "seafood"),
+                HomeMealTile(title: "Dessert", thumbnail: "dessert", subtitle: "dessert")
+            ]
+            
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     
@@ -42,8 +47,9 @@ struct HomeView: View {
                             NavigationLink(
                                 destination: HomePageRecipeView()
                             ) {
+                                //might need to await for the api call before the defaults are triggered
                                 RecipeTileView(
-                                    title: meal.title, subtitle: meal.title,
+                                    title: meal.title, subtitle: meal.subtitle,
                                     imageName: meal.thumbnail
                                 )
                             }
@@ -54,6 +60,20 @@ struct HomeView: View {
             }
             
         }
+        .task {
+            do {
+                randomMeal = try await viewModle.loadHomePageRandomRecipe()
+            } catch RecipeError.invalidURL {
+                print("Yikes no URL found")
+            } catch RecipeError.invalidResponse {
+                print("Yikes bad response")
+            } catch RecipeError.invalidData {
+                print("Yikes no data found")
+            }  catch {
+                print("Big Yikes!!")
+            }
+        }
+        
         
     }
     

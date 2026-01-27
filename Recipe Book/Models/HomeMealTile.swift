@@ -11,5 +11,5 @@ struct HomeMealTile: Identifiable {
     let id = UUID()
     let title: String
     let thumbnail: String   // image name or URL later
-    let query: String       // what we pass to the API (e.g. "pasta")
+    let subtitle: String       //
 }
