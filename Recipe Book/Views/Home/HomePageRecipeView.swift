@@ -9,28 +9,45 @@ import SwiftUI
 
 struct HomePageRecipeView: View {
 
-    let query: String
-
     var body: some View {
-        VStack {
-            Text("Recipes for")
-                .font(.headline)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
 
-            Text(query.capitalized)
-                .font(.largeTitle)
-                .fontWeight(.bold)
+                Text("Food Name")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
 
-            Spacer()
+                Rectangle()
+                    .fill(Color.gray.opacity(0.3))
+                    .frame(height: 200)
+                    .cornerRadius(12)
+
+                Text("Ingredients")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+
+                ForEach(0..<5, id: \.self) { _ in
+                    Text("• Ingredient item")
+                }
+
+                Divider()
+
+                Text("Instructions")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+
+                ForEach(0..<4, id: \.self) { step in
+                    Text("\(step + 1). Instruction step goes here.")
+                }
+            }
+            .padding()
         }
-        .padding()
-        .navigationTitle(query.capitalized)
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
 
 struct HomePageRecipeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomePageRecipeView(query: "chicken")
+        HomePageRecipeView()
     }
 }

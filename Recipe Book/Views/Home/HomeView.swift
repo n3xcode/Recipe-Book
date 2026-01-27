@@ -40,7 +40,7 @@ struct HomeView: View {
                     ) {
                         ForEach(mealsOfTheDay) { meal in
                             NavigationLink(
-                                destination: HomePageRecipeView(query: meal.query)
+                                destination: HomePageRecipeView()
                             ) {
                                 RecipeTileView(
                                     title: meal.title, subtitle: meal.title,
