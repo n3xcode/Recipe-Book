@@ -27,6 +27,11 @@
 		D80219DC2F1FDEA400FAC8E4 /* PremiumUpgradeBannerEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80219DB2F1FDEA400FAC8E4 /* PremiumUpgradeBannerEffects.swift */; };
 		D80219DE2F20D32E00FAC8E4 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80219DD2F20D32E00FAC8E4 /* AppEnvironment.swift */; };
 		D80D70502F2B72D0008AE53B /* UserDataLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D704F2F2B72D0008AE53B /* UserDataLogic.swift */; };
+		D80D70522F2B7725008AE53B /* SharedElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D70512F2B7725008AE53B /* SharedElements.swift */; };
+		D80D70542F2B7769008AE53B /* AdvertisementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D70532F2B7769008AE53B /* AdvertisementView.swift */; };
+		D80D70562F2B77B2008AE53B /* TestJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D70552F2B77B2008AE53B /* TestJSON.swift */; };
+		D80D70582F2B7811008AE53B /* Color&Themes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D70572F2B7811008AE53B /* Color&Themes.swift */; };
+		D80D705A2F2B784D008AE53B /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D80D70592F2B784D008AE53B /* Info.plist */; };
 		D85333812F28B18B003A88D5 /* GetRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85333802F28B18B003A88D5 /* GetRecipe.swift */; };
 		D85333842F28C946003A88D5 /* BasicErrorHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85333832F28C946003A88D5 /* BasicErrorHandling.swift */; };
 		D878BABB2F237B4A00B0E93D /* HomePageRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D878BABA2F237B4A00B0E93D /* HomePageRecipeView.swift */; };
@@ -54,7 +59,12 @@
 		D80219D72F1FD4EC00FAC8E4 /* PremiumUpgradeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumUpgradeView.swift; sourceTree = "<group>"; };
 		D80219DB2F1FDEA400FAC8E4 /* PremiumUpgradeBannerEffects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumUpgradeBannerEffects.swift; sourceTree = "<group>"; };
 		D80219DD2F20D32E00FAC8E4 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
-		D80D704F2F2B72D0008AE53B /* UserDataLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserDataLogic.swift; path = "Recipe Book/Utilities/Errors/UserDataLogic.swift"; sourceTree = SOURCE_ROOT; };
+		D80D704F2F2B72D0008AE53B /* UserDataLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserDataLogic.swift; path = "Recipe Book/Local Data Logic/UserDataLogic.swift"; sourceTree = SOURCE_ROOT; };
+		D80D70512F2B7725008AE53B /* SharedElements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedElements.swift; sourceTree = "<group>"; };
+		D80D70532F2B7769008AE53B /* AdvertisementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvertisementView.swift; sourceTree = "<group>"; };
+		D80D70552F2B77B2008AE53B /* TestJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TestJSON.swift; path = "Recipe Book/Resources/Sample Data/TestJSON.swift"; sourceTree = SOURCE_ROOT; };
+		D80D70572F2B7811008AE53B /* Color&Themes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Color&Themes.swift"; path = "Recipe Book/Utilities/Extensions/Color&Themes.swift"; sourceTree = SOURCE_ROOT; };
+		D80D70592F2B784D008AE53B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "Recipe Book/Supporting Files/Info.plist"; sourceTree = SOURCE_ROOT; };
 		D85333802F28B18B003A88D5 /* GetRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRecipe.swift; sourceTree = "<group>"; };
 		D85333832F28C946003A88D5 /* BasicErrorHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicErrorHandling.swift; sourceTree = "<group>"; };
 		D878BABA2F237B4A00B0E93D /* HomePageRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageRecipeView.swift; sourceTree = "<group>"; };
@@ -164,6 +174,7 @@
 		D80219962F1E82E100FAC8E4 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				D80D70512F2B7725008AE53B /* SharedElements.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -171,6 +182,7 @@
 		D80219972F1E82FE00FAC8E4 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				D80D70532F2B7769008AE53B /* AdvertisementView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -211,6 +223,7 @@
 		D802199C2F1E841F00FAC8E4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D80D70592F2B784D008AE53B /* Info.plist */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -218,6 +231,7 @@
 		D802199D2F1E84AE00FAC8E4 /* Sample Data */ = {
 			isa = PBXGroup;
 			children = (
+				D80D70552F2B77B2008AE53B /* TestJSON.swift */,
 			);
 			path = "Sample Data";
 			sourceTree = "<group>";
@@ -225,6 +239,7 @@
 		D802199E2F1E84BF00FAC8E4 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				D80D70572F2B7811008AE53B /* Color&Themes.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -339,6 +354,7 @@
 			files = (
 				D80219862F1E2ED800FAC8E4 /* Preview Assets.xcassets in Resources */,
 				D80219832F1E2ED800FAC8E4 /* Assets.xcassets in Resources */,
+				D80D705A2F2B784D008AE53B /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -349,6 +365,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D80D70542F2B7769008AE53B /* AdvertisementView.swift in Sources */,
+				D80D70562F2B77B2008AE53B /* TestJSON.swift in Sources */,
 				D878BABB2F237B4A00B0E93D /* HomePageRecipeView.swift in Sources */,
 				D80219CD2F1F643700FAC8E4 /* RecipeBookView.swift in Sources */,
 				D85333812F28B18B003A88D5 /* GetRecipe.swift in Sources */,
@@ -370,6 +388,8 @@
 				D80219D62F1FD36300FAC8E4 /* DietaryPreferences.swift in Sources */,
 				D80219CB2F1F642800FAC8E4 /* RecipeBookRowView.swift in Sources */,
 				D80219AA2F1E899900FAC8E4 /* RecipePageView.swift in Sources */,
+				D80D70522F2B7725008AE53B /* SharedElements.swift in Sources */,
+				D80D70582F2B7811008AE53B /* Color&Themes.swift in Sources */,
 				D80219DE2F20D32E00FAC8E4 /* AppEnvironment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
