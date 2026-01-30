@@ -108,6 +108,7 @@
 				D80219992F1E837100FAC8E4 /* API Services */,
 				D802199A2F1E837E00FAC8E4 /* Resources */,
 				D802199B2F1E83A100FAC8E4 /* Utilities */,
+				D8B7A84E2F2CB0A700B21F1B /* Unused assests  */,
 				D802199C2F1E841F00FAC8E4 /* Supporting Files */,
 				D80219822F1E2ED800FAC8E4 /* Assets.xcassets */,
 				D80219842F1E2ED800FAC8E4 /* Preview Content */,
@@ -292,6 +293,13 @@
 				D85333832F28C946003A88D5 /* BasicErrorHandling.swift */,
 			);
 			path = Errors;
+			sourceTree = "<group>";
+		};
+		D8B7A84E2F2CB0A700B21F1B /* Unused assests  */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "Unused assests ";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
