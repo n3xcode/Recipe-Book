@@ -35,7 +35,7 @@ struct HomeView: View {
 
                         ForEach(vm.homeMeals) { meal in
                             NavigationLink(
-                                destination: HomePageRecipeView()
+                                destination: HomePageRecipeView(mealID: meal.id)
                             ) {
                                 RecipeTileView(
                                     title: meal.title,
@@ -45,7 +45,7 @@ struct HomeView: View {
                             }
                         }
 
-                        // Optional: placeholders while loading
+                        // Optional: placeholders img while loading
                         if vm.homeMeals.isEmpty {
                             ForEach(0..<4, id: \.self) { _ in
                                 RecipeTileView(

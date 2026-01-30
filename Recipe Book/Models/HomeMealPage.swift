@@ -8,7 +8,7 @@
 import Foundation
 
 struct HomeMealPage: Identifiable {
-    let id = UUID()
+    let id: String
     let title: String
     let thumbnail: String   // image name or URL later
     let subtitle: String       //
@@ -17,6 +17,7 @@ struct HomeMealPage: Identifiable {
 extension GetHomePageRecipes {
     var summary: HomeMealPage {
         HomeMealPage(
+            id: id,
             title: name,
             thumbnail: thumbnail ?? "",
             subtitle: area ?? ""
@@ -46,6 +47,29 @@ final class HomePageRecipeViewModel: ObservableObject {
             ]
 
             homeMeals = results.compactMap { $0?.summary }
+
+        } catch {
+            print("Failed to load home meals:", error)
+        }
+    }
+}
+
+@MainActor
+final class RecipeDetailViewModel: ObservableObject {
+
+    @Published var recipe: GetHomePageRecipes?
+    
+    private let api = MealAPI()
+
+    func fetchRecipe(by id: String) async {
+        do {
+            async let selectedRecipe = api.fetchMeals(from: .lookup(id))
+
+            let results = try await [
+                selectedRecipe.first
+            ]
+            
+            //recipe = results.Map { $0?.GetHomePageRecipes }
 
         } catch {
             print("Failed to load home meals:", error)

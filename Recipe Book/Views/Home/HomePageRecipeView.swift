@@ -9,45 +9,66 @@ import SwiftUI
 
 struct HomePageRecipeView: View {
 
+    let mealID: String
+    @StateObject private var vm = RecipeDetailViewModel()
+
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
+            if let recipe = vm.recipe {
+                VStack(alignment: .leading, spacing: 16) {
 
-                Text("Food Name")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
+                    Text(recipe.name)
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
 
-                Rectangle()
-                    .fill(Color.gray.opacity(0.3))
+                    AsyncImage(url: URL(string: recipe.thumbnail ?? "")) { image in
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    } placeholder: {
+                        Color.gray.opacity(0.3)
+                    }
                     .frame(height: 200)
                     .cornerRadius(12)
+                    .clipped()
 
-                Text("Ingredients")
-                    .font(.title2)
-                    .fontWeight(.semibold)
+                    Text("Ingredients")
+                        .font(.title2)
+                        .fontWeight(.semibold)
 
-                ForEach(0..<5, id: \.self) { _ in
-                    Text("• Ingredient item")
+                    ForEach(recipe.ingredients.indices, id: \.self) { index in
+                        let ingredient = recipe.ingredients[index]
+                        Text("• \(ingredient.measure) \(ingredient.name)")
+                    }
+
+                    Divider()
+
+                    Text("Instructions")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+
+                    Text(recipe.instructions ?? "")
+                        .font(.subheadline)
+                        .fontWeight(.bold)
                 }
-
-                Divider()
-
-                Text("Instructions")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-
-                ForEach(0..<4, id: \.self) { step in
-                    Text("\(step + 1). Instruction step goes here.")
-                }
+                .padding()
+            } else {
+                ProgressView("Loading recipe...")
+                    .padding()
             }
-            .padding()
+        }
+        .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
+        .task {
+            await vm.fetchRecipe(by: mealID)
         }
     }
 }
 
 
+
 struct HomePageRecipeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomePageRecipeView()
+        HomePageRecipeView(mealID: "52949")
     }
 }
