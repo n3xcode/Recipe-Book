@@ -17,11 +17,11 @@ struct HomePageRecipeView: View {
             if let recipe = vm.recipe {
                 VStack(alignment: .leading, spacing: 16) {
 
-                    Text(recipe.name)
+                    Text(recipe.title)
                         .font(.largeTitle)
                         .fontWeight(.bold)
 
-                    AsyncImage(url: URL(string: recipe.thumbnail ?? "")) { image in
+                    AsyncImage(url: URL(string: recipe.thumbnail)) { image in
                         image
                             .resizable()
                             .scaledToFill()
@@ -47,7 +47,7 @@ struct HomePageRecipeView: View {
                         .font(.title2)
                         .fontWeight(.semibold)
 
-                    Text(recipe.instructions ?? "")
+                    Text(recipe.instructions)
                         .font(.subheadline)
                         .fontWeight(.bold)
                 }

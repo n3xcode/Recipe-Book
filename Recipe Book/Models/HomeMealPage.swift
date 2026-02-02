@@ -7,11 +7,20 @@
 
 import Foundation
 
-struct HomeMealPage: Identifiable {
+struct HomeMealPage: Identifiable, Hashable {
     let id: String
     let title: String
-    let thumbnail: String   // image name or URL later
-    let subtitle: String       //
+    let thumbnail: String
+    let subtitle: String
+}
+
+struct SelectedMealPage: Identifiable {
+    let id: String
+    let title: String
+    let thumbnail: String
+    let subtitle: String
+    let instructions: String
+    let ingredients: [GetHomePageRecipes.Ingredient]
 }
 
 extension GetHomePageRecipes {
@@ -24,6 +33,20 @@ extension GetHomePageRecipes {
         )
     }
 }
+
+extension GetHomePageRecipes {
+    var selectedRecipe: SelectedMealPage {
+        SelectedMealPage(
+            id: id,
+            title: name,
+            thumbnail: thumbnail ?? "",
+            subtitle: area ?? "",
+            instructions: instructions ?? "",
+            ingredients: ingredients
+        )
+    }
+}
+
 
 @MainActor
 final class HomePageRecipeViewModel: ObservableObject {
@@ -57,22 +80,19 @@ final class HomePageRecipeViewModel: ObservableObject {
 @MainActor
 final class RecipeDetailViewModel: ObservableObject {
 
-    @Published var recipe: GetHomePageRecipes?
-    
+    @Published var recipe: SelectedMealPage?
+
     private let api = MealAPI()
 
     func fetchRecipe(by id: String) async {
         do {
-            async let selectedRecipe = api.fetchMeals(from: .lookup(id))
+            let meals = try await api.fetchMeals(from: .lookup(id))
 
-            let results = try await [
-                selectedRecipe.first
-            ]
-            
-            //recipe = results.Map { $0?.GetHomePageRecipes }
+            recipe = meals.first?.selectedRecipe
 
         } catch {
-            print("Failed to load home meals:", error)
+            print("Failed to load recipe:", error)
+            recipe = nil
         }
     }
 }
