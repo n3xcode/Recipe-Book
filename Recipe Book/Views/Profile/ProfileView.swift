@@ -75,11 +75,12 @@ struct ProfileView: View {
                     Text("Sign Out")
                 }
 
-                Button(role: .destructive) {
-                    print("Delete Account")
-                } label: {
-                    Text("Delete Account")
-                }
+                //Not needed yet for this version of Recipe Book App
+//                Button(role: .destructive) {
+//                    print("Delete Account")
+//                } label: {
+//                    Text("Delete Account")
+//                }
             }
 
             // MARK: - App Info

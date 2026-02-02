@@ -35,6 +35,8 @@
 		D85333842F28C946003A88D5 /* BasicErrorHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85333832F28C946003A88D5 /* BasicErrorHandling.swift */; };
 		D878BABB2F237B4A00B0E93D /* HomePageRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D878BABA2F237B4A00B0E93D /* HomePageRecipeView.swift */; };
 		D878BABD2F237FD800B0E93D /* HomeMealPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D878BABC2F237FD800B0E93D /* HomeMealPage.swift */; };
+		D8B746B62F30C0E6004B7573 /* Profile Avatar Images in Resources */ = {isa = PBXBuildFile; fileRef = D8B746B52F30C0E6004B7573 /* Profile Avatar Images */; };
+		D8B746B82F30C373004B7573 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B746B72F30C373004B7573 /* UserProfile.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,6 +69,8 @@
 		D85333832F28C946003A88D5 /* BasicErrorHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicErrorHandling.swift; sourceTree = "<group>"; };
 		D878BABA2F237B4A00B0E93D /* HomePageRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageRecipeView.swift; sourceTree = "<group>"; };
 		D878BABC2F237FD800B0E93D /* HomeMealPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMealPage.swift; sourceTree = "<group>"; };
+		D8B746B52F30C0E6004B7573 /* Profile Avatar Images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Profile Avatar Images"; sourceTree = "<group>"; };
+		D8B746B72F30C373004B7573 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +112,7 @@
 				D802199B2F1E83A100FAC8E4 /* Utilities */,
 				D8B7A84E2F2CB0A700B21F1B /* Unused assests  */,
 				D802199C2F1E841F00FAC8E4 /* Supporting Files */,
+				D8B746B42F30C0C0004B7573 /* App Assets */,
 				D80219822F1E2ED800FAC8E4 /* Assets.xcassets */,
 				D80219842F1E2ED800FAC8E4 /* Preview Content */,
 			);
@@ -136,6 +141,7 @@
 			children = (
 				D80219D52F1FD36300FAC8E4 /* DietaryPreferences.swift */,
 				D878BABC2F237FD800B0E93D /* HomeMealPage.swift */,
+				D8B746B72F30C373004B7573 /* UserProfile.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -292,6 +298,14 @@
 			path = Errors;
 			sourceTree = "<group>";
 		};
+		D8B746B42F30C0C0004B7573 /* App Assets */ = {
+			isa = PBXGroup;
+			children = (
+				D8B746B52F30C0E6004B7573 /* Profile Avatar Images */,
+			);
+			path = "App Assets";
+			sourceTree = "<group>";
+		};
 		D8B7A84E2F2CB0A700B21F1B /* Unused assests  */ = {
 			isa = PBXGroup;
 			children = (
@@ -359,6 +373,7 @@
 			files = (
 				D80219862F1E2ED800FAC8E4 /* Preview Assets.xcassets in Resources */,
 				D80219832F1E2ED800FAC8E4 /* Assets.xcassets in Resources */,
+				D8B746B62F30C0E6004B7573 /* Profile Avatar Images in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,6 +401,7 @@
 				D802197F2F1E2ED600FAC8E4 /* Recipe_BookApp.swift in Sources */,
 				D80219D82F1FD4EC00FAC8E4 /* PremiumUpgradeView.swift in Sources */,
 				D80219A02F1E85C900FAC8E4 /* RootView.swift in Sources */,
+				D8B746B82F30C373004B7573 /* UserProfile.swift in Sources */,
 				D85333842F28C946003A88D5 /* BasicErrorHandling.swift in Sources */,
 				D80219DC2F1FDEA400FAC8E4 /* PremiumUpgradeBannerEffects.swift in Sources */,
 				D80219D42F1FD2A400FAC8E4 /* SettingsRowView.swift in Sources */,
