@@ -52,28 +52,70 @@ extension GetHomePageRecipes {
 final class HomePageRecipeViewModel: ObservableObject {
 
     @Published var homeMeals: [HomeMealPage] = []
+    
+    //@Published var isLoading = true
+    //Not needed, as the view handles the loading for each preview tile.
+
+    @Published var errorMessage: String?
 
     private let api = MealAPI()
+    
+    private var hasLoaded = false
+    
+    private var fetchTask: Task<Void, Never>? = nil
+    
+    func loadHomeMealsIfNeeded() async {
+        guard !hasLoaded else {return}
+        await loadHomeMeals()
+        hasLoaded = true
+    }
 
     func loadHomeMeals() async {
-        do {
-            async let random = api.fetchMeals(from: .random)
-            async let chicken = api.fetchMeals(from: .byCategory("Chicken"))
-            async let seafood = api.fetchMeals(from: .byCategory("Seafood"))
-            async let dessert = api.fetchMeals(from: .byCategory("Dessert"))
+        
+        //fetchTask cancels any previous task
+        fetchTask?.cancel()
+        
+        fetchTask = Task {
+            await MainActor.run {
+                //self.isLoading = true
+                self.errorMessage  = nil
+            }
+ 
 
-            let results = try await [
-                random.first,
-                chicken.first,
-                seafood.first,
-                dessert.first
-            ]
-
-            homeMeals = results.compactMap { $0?.summary }
-
-        } catch {
-            print("Failed to load home meals:", error)
+            defer {
+                //Task {await MainActor.run {self.isLoading = false}}
+                }
+                
+            
+            
+            do {
+                async let random = api.fetchMeals(from: .random)
+                async let chicken = api.fetchMeals(from: .byCategory("Chicken"))
+                async let seafood = api.fetchMeals(from: .byCategory("Seafood"))
+                async let dessert = api.fetchMeals(from: .byCategory("Dessert"))
+                
+                let results = try await [
+                    random.first,
+                    chicken.first,
+                    seafood.first,
+                    dessert.first
+                ]
+                
+                homeMeals = results.compactMap { $0?.summary }
+                
+            } catch is CancellationError {
+                // Normal behavior, ignore silently
+            } catch {
+                self.errorMessage = "Failed to load home meals. Pull to refresh."
+                print("Failed to load home meals:", error)
+            }
         }
+        await fetchTask?.value
+    }
+    
+    func refreshHomeMeals() async {
+        await loadHomeMeals()
+        hasLoaded = true
     }
 }
 

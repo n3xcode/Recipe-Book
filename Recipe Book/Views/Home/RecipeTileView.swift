@@ -11,7 +11,7 @@ struct RecipeTileView: View {
     
     let title: String
     let subtitle: String
-    let imageName: String   // later this becomes a URL
+    let imageName: String
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {

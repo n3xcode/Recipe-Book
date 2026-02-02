@@ -60,9 +60,12 @@ struct HomeView: View {
                     .padding(.horizontal)
                 }
             }
-            .navigationTitle("Home")
+            .navigationTitle("")
+            .refreshable {
+                await vm.refreshHomeMeals()
+            }
             .task {
-                await vm.loadHomeMeals()
+                await vm.loadHomeMealsIfNeeded()
             }
         }
     }
