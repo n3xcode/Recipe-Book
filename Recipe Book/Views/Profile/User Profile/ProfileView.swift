@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ProfileView: View {
 
-    //@EnvironmentObject var env: AppEnvironment
+    @EnvironmentObject var session: UserSession
     
     // TEMP state placeholders
     @State private var dietaryPreferences = DietaryPreferenceOptions.none
@@ -69,10 +69,8 @@ struct ProfileView: View {
             // MARK: - Account
             Section(header: Text("Account")) {
 
-                Button {
-                    print("Sign Out")
-                } label: {
-                    Text("Sign Out")
+                Button("Sign Out", role: .destructive) {
+                    session.isSignedIn = false
                 }
 
                 //Not needed yet for this version of Recipe Book App

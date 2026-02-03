@@ -4,24 +4,20 @@
 //
 //  Created by Grizzowl on 2026/01/21.
 //
-// Note: Conform obserableObject for older ios
 
-//import SwiftUI
-//
-//final class AppEnvironment: ObservableObject {
-//
-//    // MARK: - Subscription
-//    @Published var isPremiumUser: Bool = false
-//
-//
-//
-//    // MARK: - User Preferences
-//    @Published var dietPreference: DietaryPreferenceOptions = .none
-//    @Published var useMetricUnits = true
-//
-//
-//
-//    // MARK: - App Flags
-//    @Published var hasCompletedOnboarding: Bool = false
-//
-//}
+import SwiftUI
+
+
+//MARK: User session
+final class UserSession: ObservableObject {
+
+    @Published var isSignedIn: Bool {
+        didSet {
+            UserDefaults.standard.set(isSignedIn, forKey: "isSignedIn")
+        }
+    }
+
+    init() {
+        self.isSignedIn = UserDefaults.standard.bool(forKey: "isSignedIn")
+    }
+}

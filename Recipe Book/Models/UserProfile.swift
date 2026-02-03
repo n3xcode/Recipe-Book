@@ -18,25 +18,13 @@ enum Avatar: String, CaseIterable, Identifiable {
     var id: String { rawValue }
 }
 
-final class AvatarPickerViewModel: ObservableObject {
-
-    private let storageKey = "selectedAvatar"
-
-    @Published var selectedAvatar: Avatar {
-        didSet {
-            UserDefaults.standard.set(selectedAvatar.rawValue, forKey: storageKey)
-        }
-    }
-
-    let avatars = Avatar.allCases
-
-    init() {
-        let saved = UserDefaults.standard.string(forKey: storageKey)
-        self.selectedAvatar = Avatar(rawValue: saved ?? "") ?? .ProfilePicture1
-    }
-
-    func select(_ avatar: Avatar) {
-        selectedAvatar = avatar
-    }
+enum UserSettingsKey: String {
+    case username
+    case email
+    case profilePictureIndex
+    case dietPreference
+    case isPremium
+    case useMetricUnits
+    case showNutritionInfo
 }
 

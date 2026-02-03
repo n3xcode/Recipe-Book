@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct RootView: View {
+    
+    @StateObject private var session = UserSession()
+    @StateObject private var settings = UserSettings.shared
+    
     var body: some View {
         TabView {
 
@@ -26,8 +30,14 @@ struct RootView: View {
             }
 
             NavigationView {
-                ProfileView()
+                if session.isSignedIn {
+                    ProfileView()
+                } else {
+                    GuestUserView()
+                }
             }
+            .environmentObject(settings)
+            .environmentObject(session)
             .tabItem {
                 Label("Profile", systemImage: "person.fill")
             }
