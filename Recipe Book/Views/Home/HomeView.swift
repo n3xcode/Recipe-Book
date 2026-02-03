@@ -9,8 +9,16 @@ import SwiftUI
 
 struct HomeView: View {
 
-    @StateObject private var vm = HomePageRecipeViewModel()
+    @StateObject private var vm: HomePageRecipeViewModel
+    @StateObject private var searchVM: MealSearchViewModel
     @State private var searchText: String = ""
+    init() {
+        let homeVM = HomePageRecipeViewModel()
+        _vm = StateObject(wrappedValue: homeVM)
+        _searchVM = StateObject(
+            wrappedValue: MealSearchViewModel(api: homeVM.api)
+        )
+    }
 
     var body: some View {
 
@@ -18,7 +26,26 @@ struct HomeView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
 
-                    SearchBarView(searchText: $searchText)
+                    VStack(alignment: .leading, spacing: 6) {
+
+                        SearchBarView(searchText: $searchText)
+                            .onChange(of: searchText) { newValue in
+                                searchVM.onQueryChange(newValue)
+                            }
+
+                        if !searchText.isEmpty && !searchVM.results.isEmpty {
+                            SearchResultsDropdown(
+                                meals: searchVM.results,
+                                query: searchText,
+                                onSelect: { _ in
+                                    searchText = ""
+                                    searchVM.results = []
+                                    //dismissKeyboard()
+                                }
+                            )
+                            .padding(.horizontal)
+                        }
+                    }
 
                     Text("Meals of the Day")
                         .font(.title2)

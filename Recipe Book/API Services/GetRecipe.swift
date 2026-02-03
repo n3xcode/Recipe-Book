@@ -64,7 +64,7 @@ final class HomePageRecipeViewModel: ObservableObject {
 
     @Published var errorMessage: String?
 
-    private let api = MealAPI()
+    let api = MealAPI()
     
     private var hasLoaded = false
     
