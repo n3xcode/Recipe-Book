@@ -7,55 +7,6 @@
 
 import Foundation
 
-struct MealsResponse: Decodable {
-    let meals: [GetHomePageRecipes]
-}
-
-struct Ingredient: Identifiable {
-    let id: String
-    let name: String
-    let measure: String
-}
-
-struct GetHomePageRecipes: Decodable {
-    let id: String
-    let name: String
-    let category: String?
-    let area: String?
-    let instructions: String?
-    let thumbnail: String?
-    let youtubeURL: String?
-    
-    // Raw ingredient + measure fields
-    let ingredients: [Ingredient]
-    
-    struct Ingredient {
-        let name: String
-        let measure: String
-    }
-    
-    enum CodingKeys: String, CodingKey {
-        case id = "idMeal"
-        case name = "strMeal"
-        case category = "strCategory"
-        case area = "strArea"
-        case instructions = "strInstructions"
-        case thumbnail = "strMealThumb"
-        case youtubeURL = "strYoutube"
-        
-        case strIngredient1, strIngredient2, strIngredient3, strIngredient4, strIngredient5
-        case strIngredient6, strIngredient7, strIngredient8, strIngredient9, strIngredient10
-        case strIngredient11, strIngredient12, strIngredient13, strIngredient14, strIngredient15
-        case strIngredient16, strIngredient17, strIngredient18, strIngredient19, strIngredient20
-        
-        case strMeasure1, strMeasure2, strMeasure3, strMeasure4, strMeasure5
-        case strMeasure6, strMeasure7, strMeasure8, strMeasure9, strMeasure10
-        case strMeasure11, strMeasure12, strMeasure13, strMeasure14, strMeasure15
-        case strMeasure16, strMeasure17, strMeasure18, strMeasure19, strMeasure20
-    }
-}
-
-
 extension GetHomePageRecipes {
     
     init(from decoder: Decoder) throws {
@@ -93,44 +44,6 @@ extension GetHomePageRecipes {
     
 }
 
-
-
-enum MealEndpoint {
-    case random
-    case search(String)
-    case byCategory(String)
-    case lookup(String)
-    
-    var url: URL {
-        var components = URLComponents(string: "https://www.themealdb.com/api/json/v1/1")!
-        
-        switch self {
-        case .random:
-            components.path += "/random.php"
-            
-        case .search(let query):
-            components.path += "/search.php"
-            components.queryItems = [
-                URLQueryItem(name: "s", value: query)
-            ]
-            
-        case .byCategory(let category):
-            components.path += "/filter.php"
-            components.queryItems = [
-                URLQueryItem(name: "c", value: category)
-            ]
-            
-        case .lookup(let id):
-            components.path += "/lookup.php"
-            components.queryItems = [
-                URLQueryItem(name: "i", value: id)
-            ]
-        }
-        
-        return components.url!
-    }
-}
-
 final class MealAPI {
     
     func fetchMeals(from endpoint: MealEndpoint) async throws -> [GetHomePageRecipes] {
@@ -140,4 +53,95 @@ final class MealAPI {
     }
 }
 
+// MARK: HomePageRecipeViewModel
+@MainActor
+final class HomePageRecipeViewModel: ObservableObject {
+
+    @Published var homeMeals: [HomeMealPage] = []
+    
+    //@Published var isLoading = true
+    //Not needed, as the view handles the loading for each preview tile.
+
+    @Published var errorMessage: String?
+
+    private let api = MealAPI()
+    
+    private var hasLoaded = false
+    
+    private var fetchTask: Task<Void, Never>? = nil
+    
+    func loadHomeMealsIfNeeded() async {
+        guard !hasLoaded else {return}
+        await loadHomeMeals()
+        hasLoaded = true
+    }
+
+    func loadHomeMeals() async {
+        
+        //fetchTask cancels any previous task
+        fetchTask?.cancel()
+        
+        fetchTask = Task {
+            await MainActor.run {
+                //self.isLoading = true
+                self.errorMessage  = nil
+            }
+ 
+
+            defer {
+                //Task {await MainActor.run {self.isLoading = false}}
+                }
+                
+            
+            
+            do {
+                async let random = api.fetchMeals(from: .random)
+                async let chicken = api.fetchMeals(from: .byCategory("Chicken"))
+                async let seafood = api.fetchMeals(from: .byCategory("Seafood"))
+                async let dessert = api.fetchMeals(from: .byCategory("Dessert"))
+                
+                let results = try await [
+                    random.first,
+                    chicken.first,
+                    seafood.first,
+                    dessert.first
+                ]
+                
+                homeMeals = results.compactMap { $0?.summary }
+                
+            } catch is CancellationError {
+                // Normal behavior, ignore silently
+            } catch {
+                self.errorMessage = "Failed to load home meals. Pull to refresh."
+                print("Failed to load home meals:", error)
+            }
+        }
+        await fetchTask?.value
+    }
+    
+    func refreshHomeMeals() async {
+        await loadHomeMeals()
+        hasLoaded = true
+    }
+}
+
+@MainActor
+final class RecipeDetailViewModel: ObservableObject {
+
+    @Published var recipe: SelectedMealPage?
+
+    private let api = MealAPI()
+
+    func fetchRecipe(by id: String) async {
+        do {
+            let meals = try await api.fetchMeals(from: .lookup(id))
+
+            recipe = meals.first?.selectedRecipe
+
+        } catch {
+            print("Failed to load recipe:", error)
+            recipe = nil
+        }
+    }
+}
 

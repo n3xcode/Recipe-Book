@@ -40,6 +40,7 @@
 		D8B746BE2F30FA6D004B7573 /* GuestUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B746BD2F30FA6D004B7573 /* GuestUserView.swift */; };
 		D8B746C02F30FC5E004B7573 /* SignInFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B746BF2F30FC5E004B7573 /* SignInFormView.swift */; };
 		D8BD04022F31DCD800AD6BD0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BD04012F31DCD800AD6BD0 /* ContentView.swift */; };
+		D8BD04042F31DEEB00AD6BD0 /* APIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BD04032F31DEEB00AD6BD0 /* APIModels.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -78,6 +79,7 @@
 		D8B746BD2F30FA6D004B7573 /* GuestUserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestUserView.swift; sourceTree = "<group>"; };
 		D8B746BF2F30FC5E004B7573 /* SignInFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInFormView.swift; sourceTree = "<group>"; };
 		D8BD04012F31DCD800AD6BD0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		D8BD04032F31DEEB00AD6BD0 /* APIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIModels.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +151,7 @@
 				D80219D52F1FD36300FAC8E4 /* DietaryPreferences.swift */,
 				D878BABC2F237FD800B0E93D /* HomeMealPage.swift */,
 				D8B746B72F30C373004B7573 /* UserProfile.swift */,
+				D8BD04032F31DEEB00AD6BD0 /* APIModels.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -413,6 +416,7 @@
 			files = (
 				D80D70542F2B7769008AE53B /* AdvertisementView.swift in Sources */,
 				D80D70562F2B77B2008AE53B /* TestJSON.swift in Sources */,
+				D8BD04042F31DEEB00AD6BD0 /* APIModels.swift in Sources */,
 				D878BABB2F237B4A00B0E93D /* HomePageRecipeView.swift in Sources */,
 				D80219CD2F1F643700FAC8E4 /* RecipeBookView.swift in Sources */,
 				D85333812F28B18B003A88D5 /* GetRecipe.swift in Sources */,
