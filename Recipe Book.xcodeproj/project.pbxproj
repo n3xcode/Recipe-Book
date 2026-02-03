@@ -44,6 +44,7 @@
 		D8BD04072F31EA6B00AD6BD0 /* MealSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BD04062F31EA6B00AD6BD0 /* MealSearch.swift */; };
 		D8BD04092F31EDCC00AD6BD0 /* SearchResultsElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BD04082F31EDCC00AD6BD0 /* SearchResultsElements.swift */; };
 		D8BD040B2F31EFC700AD6BD0 /* DismissKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BD040A2F31EFC700AD6BD0 /* DismissKeyboard.swift */; };
+		D8BD040D2F32065F00AD6BD0 /* APIErrorHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BD040C2F32065F00AD6BD0 /* APIErrorHandling.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -86,6 +87,7 @@
 		D8BD04062F31EA6B00AD6BD0 /* MealSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealSearch.swift; sourceTree = "<group>"; };
 		D8BD04082F31EDCC00AD6BD0 /* SearchResultsElements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsElements.swift; sourceTree = "<group>"; };
 		D8BD040A2F31EFC700AD6BD0 /* DismissKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissKeyboard.swift; sourceTree = "<group>"; };
+		D8BD040C2F32065F00AD6BD0 /* APIErrorHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIErrorHandling.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -313,6 +315,7 @@
 			isa = PBXGroup;
 			children = (
 				D85333832F28C946003A88D5 /* BasicErrorHandling.swift */,
+				D8BD040C2F32065F00AD6BD0 /* APIErrorHandling.swift */,
 			);
 			path = Errors;
 			sourceTree = "<group>";
@@ -431,6 +434,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8BD040D2F32065F00AD6BD0 /* APIErrorHandling.swift in Sources */,
 				D8BD04072F31EA6B00AD6BD0 /* MealSearch.swift in Sources */,
 				D80D70542F2B7769008AE53B /* AdvertisementView.swift in Sources */,
 				D80D70562F2B77B2008AE53B /* TestJSON.swift in Sources */,
