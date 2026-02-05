@@ -17,14 +17,32 @@ struct SearchResultsDropdown: View {
         ScrollView {
             VStack(spacing: 0) {
                 ForEach(meals) { meal in
-                    NavigationLink(
-                        destination: HomePageRecipeView(mealID: meal.id)
-                            .onAppear {
-                                // parent decides what to do when navigation occurs
-                                onSelect(meal)
-                            }
-                    ) {
-                        SearchResultRow(meal: meal, query: query)
+                    if meal.id == "no_results" {
+                        // No results placeholder
+                        VStack {
+                            Text(meal.title)
+                                .font(.headline)
+                                .foregroundColor(.gray)
+                            
+                            Text(meal.subtitle)
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                        }
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(8)
+                        .frame(maxWidth: .infinity)  // Ensure it spans full width
+                    } else {
+                        // Regular result cell
+                        NavigationLink(
+                            destination: HomePageRecipeView(mealID: meal.id)
+                                .onAppear {
+                                    // parent decides what to do when navigation occurs
+                                    onSelect(meal)
+                                }
+                        ) {
+                            SearchResultRow(meal: meal, query: query)
+                        }
                     }
                     Divider()
                 }

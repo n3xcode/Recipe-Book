@@ -37,3 +37,12 @@ enum SearchError: Error {
 func handleError(_ error: SearchError) {
     print(error.localizedDescription)
 }
+
+extension HomeMealPage {
+    static let noResults = HomeMealPage(
+        id: "no_results",
+        title: "No Matching Results",
+        thumbnail: "",
+        subtitle: "Try a different search"
+    )
+}

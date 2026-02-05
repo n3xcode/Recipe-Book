@@ -62,6 +62,8 @@ final class MealSearchViewModel: ObservableObject {
             } catch let error as DecodingError {
                 // Handle decoding errors
                 handleError(.decodingError(error))
+                //UI toggtle if theres no results
+                self.results = [.noResults]
             } catch {
                 // Handle unexpected errors
                 handleError(.unknownError(error))
