@@ -32,20 +32,20 @@ class ImageStorageManager {
 final class SaveRecipeImg: ObservableObject{
     
     //get recipe id -> img url
-    private let testImageURL = "https://www.themealdb.com/images/media/meals/o5fuq51764789643.jpg"
+    var getRecipeImgUrl = ""
     var isBookmarked:Bool = false
     
-    func saveImageToDisk() {
+    func saveImageToDisk(getRecipeImgUrl: String) {
 
-        guard let url = URL(string: testImageURL) else { return }
+        guard let url = URL(string: getRecipeImgUrl) else { return }
         
         // Use the last path component of the URL as filename
         let fileName = url.lastPathComponent
         let fileURL = ImageStorageManager.shared.fileURL(for: fileName)
         
-        if ImageStorageManager.shared.fileExists(fileName: fileName) {
+        if ImageStorageManager.shared.fileExists(fileName: fileName) || getRecipeImgUrl == "" {
             isBookmarked = true
-            print("Image already saved")
+            print("Image already saved or no url path")
             return
         }
         
