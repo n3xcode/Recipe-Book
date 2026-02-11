@@ -30,6 +30,7 @@
 		D80D70542F2B7769008AE53B /* AdvertisementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D70532F2B7769008AE53B /* AdvertisementView.swift */; };
 		D80D70562F2B77B2008AE53B /* TestJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D70552F2B77B2008AE53B /* TestJSON.swift */; };
 		D80D70582F2B7811008AE53B /* Color&Themes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D70572F2B7811008AE53B /* Color&Themes.swift */; };
+		D82F34F12F3C696C0086373F /* RecipeCD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D82F34EF2F3C696C0086373F /* RecipeCD.xcdatamodeld */; };
 		D85333812F28B18B003A88D5 /* GetRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85333802F28B18B003A88D5 /* GetRecipe.swift */; };
 		D85333842F28C946003A88D5 /* BasicErrorHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85333832F28C946003A88D5 /* BasicErrorHandling.swift */; };
 		D878BABB2F237B4A00B0E93D /* HomePageRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D878BABA2F237B4A00B0E93D /* HomePageRecipeView.swift */; };
@@ -72,6 +73,7 @@
 		D80D70532F2B7769008AE53B /* AdvertisementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvertisementView.swift; sourceTree = "<group>"; };
 		D80D70552F2B77B2008AE53B /* TestJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TestJSON.swift; path = "Recipe Book/Resources/Sample Data/TestJSON.swift"; sourceTree = SOURCE_ROOT; };
 		D80D70572F2B7811008AE53B /* Color&Themes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Color&Themes.swift"; path = "Recipe Book/Utilities/Extensions/Color&Themes.swift"; sourceTree = SOURCE_ROOT; };
+		D82F34F02F3C696C0086373F /* RecipeCD.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = RecipeCD.xcdatamodel; sourceTree = "<group>"; };
 		D85333802F28B18B003A88D5 /* GetRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRecipe.swift; sourceTree = "<group>"; };
 		D85333832F28C946003A88D5 /* BasicErrorHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicErrorHandling.swift; sourceTree = "<group>"; };
 		D878BABA2F237B4A00B0E93D /* HomePageRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageRecipeView.swift; sourceTree = "<group>"; };
@@ -215,6 +217,7 @@
 			children = (
 				D80D704F2F2B72D0008AE53B /* UserDataLogic.swift */,
 				D8B746B92F30F4F6004B7573 /* UserProfileSettings.swift */,
+				D82F34EF2F3C696C0086373F /* RecipeCD.xcdatamodeld */,
 			);
 			path = "Local Data Logic";
 			sourceTree = "<group>";
@@ -442,6 +445,7 @@
 				D878BABB2F237B4A00B0E93D /* HomePageRecipeView.swift in Sources */,
 				D80219CD2F1F643700FAC8E4 /* RecipeBookView.swift in Sources */,
 				D8BD04092F31EDCC00AD6BD0 /* SearchResultsElements.swift in Sources */,
+				D82F34F12F3C696C0086373F /* RecipeCD.xcdatamodeld in Sources */,
 				D85333812F28B18B003A88D5 /* GetRecipe.swift in Sources */,
 				D80219AC2F1E89AA00FAC8E4 /* ProfileView.swift in Sources */,
 				D80219A52F1E882300FAC8E4 /* SearchBarView.swift in Sources */,
@@ -669,6 +673,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		D82F34EF2F3C696C0086373F /* RecipeCD.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				D82F34F02F3C696C0086373F /* RecipeCD.xcdatamodel */,
+			);
+			currentVersion = D82F34F02F3C696C0086373F /* RecipeCD.xcdatamodel */;
+			path = RecipeCD.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = D80219732F1E2ED600FAC8E4 /* Project object */;
 }
