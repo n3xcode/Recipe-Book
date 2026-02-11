@@ -35,6 +35,37 @@ final class SaveRecipeImg: ObservableObject{
     var getRecipeImgUrl = ""
     var isBookmarked:Bool = false
     
+    //MARK: load Img
+    //for now delete img in session later link to Meal img id in core data
+    var savedImage: UIImage? = nil
+    
+    func loadImageAsync(getImgId: String) async {
+        
+        await Task.detached(priority: .background) {
+            
+            let documentsURL = FileManager.default.urls(for: .documentDirectory,
+                                                        in: .userDomainMask)[0]
+            let fileURL = documentsURL.appendingPathComponent(getImgId)
+            
+            var image: UIImage? = nil
+            
+            // Only check if the file exists
+            if FileManager.default.fileExists(atPath: fileURL.path) {
+                image = UIImage(contentsOfFile: fileURL.path)
+            }
+            
+            // Update UI on main thread if we found the image
+            if let image {
+                await MainActor.run {
+                    self.savedImage = image
+                }
+            }
+            // If the image is nil (file missing), savedImage stays nil → placeholder shows
+        }.value
+    }
+    
+    //MARK: Save Img
+    
     func saveImageToDisk(getRecipeImgUrl: String) {
 
         guard let url = URL(string: getRecipeImgUrl) else { return }

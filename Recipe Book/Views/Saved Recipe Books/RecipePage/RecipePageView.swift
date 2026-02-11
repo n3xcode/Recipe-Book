@@ -8,15 +8,14 @@
 import SwiftUI
 
 struct RecipePageView: View {
-
+    
+    @StateObject private var vm = RecipeDetailViewModel()
+    //private var getImgId = vm.recipe
+    @StateObject private var svImg = SaveRecipeImg()
     let recipeIndex: Int
     
-    @State private var savedImage: UIImage? = nil
-    
     // For testing, using hardcoded URL as "filename"
-    private var fileName: String {
-        "o5fuq51764789643.jpg" // just the name, not full URL
-    }
+    var hasFileName: String = "o5fuq51764789643.jpg"
 
     var body: some View {
         ScrollView {
@@ -27,8 +26,8 @@ struct RecipePageView: View {
                     .fontWeight(.bold)
 
                 // Conditional image
-                if let savedImage {
-                    Image(uiImage: savedImage)
+                if svImg.savedImage != nil {
+                    Image(uiImage: svImg.savedImage!)
                         .resizable()
                         .scaledToFill()
                         .frame(height: 200)
@@ -63,35 +62,40 @@ struct RecipePageView: View {
         }
         // Async load only when view appears
         .task {
-            await loadImageAsync()
+            if (hasFileName != "") {
+                await svImg.loadImageAsync(getImgId: hasFileName)
+                print("if = \(hasFileName)")
+            } else {
+                print("Thumbnail is nil. Recipe:", "else = \(hasFileName)")
+            }
         }
     }
     
     // MARK: Async Image Loader
-    private func loadImageAsync() async {
-        
-        await Task.detached(priority: .background) {
-            
-            let documentsURL = FileManager.default.urls(for: .documentDirectory,
-                                                        in: .userDomainMask)[0]
-            let fileURL = documentsURL.appendingPathComponent(fileName)
-            
-            var image: UIImage? = nil
-            
-            // Only check if the file exists
-            if FileManager.default.fileExists(atPath: fileURL.path) {
-                image = UIImage(contentsOfFile: fileURL.path)
-            }
-            
-            // Update UI on main thread if we found the image
-            if let image {
-                await MainActor.run {
-                    self.savedImage = image
-                }
-            }
-            // If the image is nil (file missing), savedImage stays nil → placeholder shows
-        }.value
-    }
+//    private func loadImageAsync() async {
+//
+//        await Task.detached(priority: .background) {
+//
+//            let documentsURL = FileManager.default.urls(for: .documentDirectory,
+//                                                        in: .userDomainMask)[0]
+//            let fileURL = documentsURL.appendingPathComponent(fileName)
+//
+//            var image: UIImage? = nil
+//
+//            // Only check if the file exists
+//            if FileManager.default.fileExists(atPath: fileURL.path) {
+//                image = UIImage(contentsOfFile: fileURL.path)
+//            }
+//
+//            // Update UI on main thread if we found the image
+//            if let image {
+//                await MainActor.run {
+//                    self.savedImage = image
+//                }
+//            }
+//            // If the image is nil (file missing), savedImage stays nil → placeholder shows
+//        }.value
+//    }
 
 
 }
@@ -99,6 +103,6 @@ struct RecipePageView: View {
 
 struct RecipePageView_Previews: PreviewProvider {
     static var previews: some View {
-        RecipePageView(recipeIndex: 0)
+        RecipePageView(recipeIndex: 0, hasFileName: "o5fuq51764789643.jpg")
     }
 }
