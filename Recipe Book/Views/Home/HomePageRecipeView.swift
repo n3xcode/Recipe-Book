@@ -8,19 +8,20 @@
 import SwiftUI
 
 struct HomePageRecipeView: View {
-
+    
     let mealID: String
     @StateObject private var vm = RecipeDetailViewModel()
-
+    @StateObject private var svImg = SaveRecipeImg()
+    
     var body: some View {
         ScrollView {
             if let recipe = vm.recipe {
                 VStack(alignment: .leading, spacing: 16) {
-
+                    
                     Text(recipe.title)
                         .font(.largeTitle)
                         .fontWeight(.bold)
-
+                    
                     AsyncImage(url: URL(string: recipe.thumbnail)) { image in
                         image
                             .resizable()
@@ -31,22 +32,22 @@ struct HomePageRecipeView: View {
                     .frame(height: 200)
                     .cornerRadius(12)
                     .clipped()
-
+                    
                     Text("Ingredients")
                         .font(.title2)
                         .fontWeight(.semibold)
-
+                    
                     ForEach(recipe.ingredients.indices, id: \.self) { index in
                         let ingredient = recipe.ingredients[index]
                         Text("• \(ingredient.measure) \(ingredient.name)")
                     }
-
+                    
                     Divider()
-
+                    
                     Text("Instructions")
                         .font(.title2)
                         .fontWeight(.semibold)
-
+                    
                     Text(recipe.instructions)
                         .font(.subheadline)
                         .fontWeight(.bold)
@@ -59,11 +60,21 @@ struct HomePageRecipeView: View {
         }
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    svImg.saveImageToDisk()
+                } label: {
+                    Image(systemName: svImg.isBookmarked ? "bookmark.fill" : "bookmark")
+                }
+            }
+        }
         .task {
             await vm.fetchRecipe(by: mealID)
         }
     }
 }
+
 
 
 
