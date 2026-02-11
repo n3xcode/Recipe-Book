@@ -4,7 +4,7 @@
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <relationship name="recipe" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RecipeEntity"/>
+        <relationship name="recipe" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RecipeEntity" inverseName="book" inverseEntity="RecipeEntity"/>
     </entity>
     <entity name="RecipeEntity" representedClassName="RecipeEntity" syncable="YES" codeGenerationType="class">
         <attribute name="area" optional="YES" attributeType="String"/>
@@ -15,6 +15,6 @@
         <attribute name="instructions" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="thumbnail" optional="YES" attributeType="String"/>
-        <relationship name="book" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BookEntity"/>
+        <relationship name="book" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BookEntity" inverseName="recipe" inverseEntity="BookEntity"/>
     </entity>
 </model>

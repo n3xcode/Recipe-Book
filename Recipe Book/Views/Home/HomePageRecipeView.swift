@@ -64,6 +64,7 @@ struct HomePageRecipeView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     svImg.saveImageToDisk(getRecipeImgUrl: vm.recipe!.thumbnail)
+                    //saveMeal() to core data
                 } label: {
                     //check if id is saved toggle
                     Image(systemName: svImg.isBookmarked ? "bookmark.fill" : "bookmark")

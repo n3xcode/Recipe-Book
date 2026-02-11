@@ -217,9 +217,9 @@
 		D80219982F1E836100FAC8E4 /* Local Data Logic */ = {
 			isa = PBXGroup;
 			children = (
+				D82F34F42F3C8E890086373F /* Core Data */,
 				D80D704F2F2B72D0008AE53B /* UserDataLogic.swift */,
 				D8B746B92F30F4F6004B7573 /* UserProfileSettings.swift */,
-				D82F34EF2F3C696C0086373F /* RecipeCD.xcdatamodeld */,
 				D82F34F22F3C6CC50086373F /* ImageStorageManager.swift */,
 			);
 			path = "Local Data Logic";
@@ -315,6 +315,14 @@
 				D80219CF2F1F85DA00FAC8E4 /* PageCurlView.swift */,
 			);
 			path = RecipePage;
+			sourceTree = "<group>";
+		};
+		D82F34F42F3C8E890086373F /* Core Data */ = {
+			isa = PBXGroup;
+			children = (
+				D82F34EF2F3C696C0086373F /* RecipeCD.xcdatamodeld */,
+			);
+			path = "Core Data";
 			sourceTree = "<group>";
 		};
 		D85333822F28C39F003A88D5 /* Errors */ = {
