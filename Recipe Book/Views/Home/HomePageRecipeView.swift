@@ -65,6 +65,7 @@ struct HomePageRecipeView: View {
                 Button {
                     svImg.saveImageToDisk()
                 } label: {
+                    //check if id is saved toggle
                     Image(systemName: svImg.isBookmarked ? "bookmark.fill" : "bookmark")
                 }
             }

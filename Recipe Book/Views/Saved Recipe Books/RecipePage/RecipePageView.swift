@@ -78,7 +78,7 @@ struct RecipePageView: View {
             
             var image: UIImage? = nil
             
-            // ✅ Only check if the file exists
+            // Only check if the file exists
             if FileManager.default.fileExists(atPath: fileURL.path) {
                 image = UIImage(contentsOfFile: fileURL.path)
             }
