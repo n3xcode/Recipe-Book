@@ -18,72 +18,89 @@ struct SavedRecipesView: View {
     @State private var selectedBook: BookEntity?
 
     var body: some View {
-        List {
-            Section(header: Text("My Recipe Books")) {
+        ZStack {
+            List {
+                Section(header: Text("My Recipe Books")) {
 
-                ForEach(vm.books, id: \.objectID) { book in
+                    ForEach(vm.books, id: \.objectID) { book in
 
-                    NavigationLink {
-                        RecipeBookView(bookTitle: book.name ?? "Untitled")
+                        NavigationLink {
+                            RecipeBookView(bookTitle: book.name ?? "Untitled")
+                        } label: {
+                            RecipeBookRowView(
+                                title: book.name ?? "Untitled",
+                                recipeCount: book.recipe?.count ?? 0
+                            )
+                        }
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+
+                            // Edit
+                            Button {
+                                selectedBook = book
+                                newBookName = book.name ?? ""
+                                showEditAlert = true
+                            } label: {
+                                Label("Edit", systemImage: "pencil")
+                            }
+                            .tint(.blue)
+
+                            // Delete
+                            Button(role: .destructive) {
+                                vm.deleteBook(book)
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
+                        }
+                    }
+                }
+            }
+            .listStyle(.insetGrouped)
+            .navigationTitle("My Recipes")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        newBookName = ""
+                        showAddAlert = true
                     } label: {
-                        RecipeBookRowView(
-                            title: book.name ?? "Untitled",
-                            recipeCount: book.recipe?.count ?? 0
-                        )
-                    }
-                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-
-                        // Edit
-                        Button {
-                            selectedBook = book
-                            newBookName = book.name ?? ""
-                            showEditAlert = true
-                        } label: {
-                            Label("Edit", systemImage: "pencil")
-                        }
-                        .tint(.blue)
-
-                        // Delete
-                        Button(role: .destructive) {
-                            vm.deleteBook(book)
-                        } label: {
-                            Label("Delete", systemImage: "trash")
-                        }
+                        Image(systemName: "plus")
                     }
                 }
             }
-        }
-        .listStyle(.insetGrouped)
-        .navigationTitle("My Recipes")
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    newBookName = ""
-                    showAddAlert = true
-                } label: {
-                    Image(systemName: "plus")
-                }
+
+            // MARK: - Add Book Alert
+            if showAddAlert {
+                CustomTextFieldAlert(
+                    title: "New Book",
+                    text: $newBookName,
+                    confirmTitle: "Save",
+                    onCancel: {
+                        showAddAlert = false
+                    },
+                    onConfirm: {
+                        let trimmed = newBookName.trimmingCharacters(in: .whitespaces)
+                        guard !trimmed.isEmpty else { return }
+                        vm.addBook(name: trimmed)
+                        showAddAlert = false
+                    }
+                )
             }
-        }
-        .alert("New Book", isPresented: $showAddAlert) {
-            TextField("Book Name", text: $newBookName)
 
-            Button("Cancel", role: .cancel) {}
-
-            Button("Save") {
-                guard !newBookName.trimmingCharacters(in: .whitespaces).isEmpty else { return }
-                vm.addBook(name: newBookName)
-            }
-        }
-        .alert("Edit Book", isPresented: $showEditAlert) {
-            TextField("Book Name", text: $newBookName)
-
-            Button("Cancel", role: .cancel) {}
-
-            Button("Update") {
-                if let selectedBook {
-                    vm.updateBook(selectedBook, name: newBookName)
-                }
+            // MARK: - Edit Book Alert
+            if showEditAlert {
+                CustomTextFieldAlert(
+                    title: "Edit Book",
+                    text: $newBookName,
+                    confirmTitle: "Update",
+                    onCancel: {
+                        showEditAlert = false
+                    },
+                    onConfirm: {
+                        if let selectedBook {
+                            vm.updateBook(selectedBook, name: newBookName)
+                        }
+                        showEditAlert = false
+                    }
+                )
             }
         }
     }
