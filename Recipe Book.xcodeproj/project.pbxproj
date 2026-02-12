@@ -32,6 +32,9 @@
 		D80D70582F2B7811008AE53B /* Color&Themes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D70572F2B7811008AE53B /* Color&Themes.swift */; };
 		D82F34F12F3C696C0086373F /* RecipeCD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D82F34EF2F3C696C0086373F /* RecipeCD.xcdatamodeld */; };
 		D82F34F32F3C6CC50086373F /* ImageStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82F34F22F3C6CC50086373F /* ImageStorageManager.swift */; };
+		D851FD782F3DCEC5007DB8B2 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D851FD772F3DCEC5007DB8B2 /* CoreDataManager.swift */; };
+		D851FD822F3DD5A6007DB8B2 /* BookRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D851FD812F3DD5A6007DB8B2 /* BookRepository.swift */; };
+		D851FD842F3DD5D7007DB8B2 /* SavedBooksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D851FD832F3DD5D7007DB8B2 /* SavedBooksViewModel.swift */; };
 		D85333812F28B18B003A88D5 /* GetRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85333802F28B18B003A88D5 /* GetRecipe.swift */; };
 		D85333842F28C946003A88D5 /* BasicErrorHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85333832F28C946003A88D5 /* BasicErrorHandling.swift */; };
 		D878BABB2F237B4A00B0E93D /* HomePageRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D878BABA2F237B4A00B0E93D /* HomePageRecipeView.swift */; };
@@ -76,6 +79,9 @@
 		D80D70572F2B7811008AE53B /* Color&Themes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Color&Themes.swift"; path = "Recipe Book/Utilities/Extensions/Color&Themes.swift"; sourceTree = SOURCE_ROOT; };
 		D82F34F02F3C696C0086373F /* RecipeCD.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = RecipeCD.xcdatamodel; sourceTree = "<group>"; };
 		D82F34F22F3C6CC50086373F /* ImageStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStorageManager.swift; sourceTree = "<group>"; };
+		D851FD772F3DCEC5007DB8B2 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		D851FD812F3DD5A6007DB8B2 /* BookRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookRepository.swift; sourceTree = "<group>"; };
+		D851FD832F3DD5D7007DB8B2 /* SavedBooksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedBooksViewModel.swift; sourceTree = "<group>"; };
 		D85333802F28B18B003A88D5 /* GetRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRecipe.swift; sourceTree = "<group>"; };
 		D85333832F28C946003A88D5 /* BasicErrorHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicErrorHandling.swift; sourceTree = "<group>"; };
 		D878BABA2F237B4A00B0E93D /* HomePageRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageRecipeView.swift; sourceTree = "<group>"; };
@@ -221,6 +227,7 @@
 				D80D704F2F2B72D0008AE53B /* UserDataLogic.swift */,
 				D8B746B92F30F4F6004B7573 /* UserProfileSettings.swift */,
 				D82F34F22F3C6CC50086373F /* ImageStorageManager.swift */,
+				D851FD832F3DD5D7007DB8B2 /* SavedBooksViewModel.swift */,
 			);
 			path = "Local Data Logic";
 			sourceTree = "<group>";
@@ -321,6 +328,8 @@
 			isa = PBXGroup;
 			children = (
 				D82F34EF2F3C696C0086373F /* RecipeCD.xcdatamodeld */,
+				D851FD772F3DCEC5007DB8B2 /* CoreDataManager.swift */,
+				D851FD812F3DD5A6007DB8B2 /* BookRepository.swift */,
 			);
 			path = "Core Data";
 			sourceTree = "<group>";
@@ -457,6 +466,7 @@
 				D80219CD2F1F643700FAC8E4 /* RecipeBookView.swift in Sources */,
 				D8BD04092F31EDCC00AD6BD0 /* SearchResultsElements.swift in Sources */,
 				D82F34F12F3C696C0086373F /* RecipeCD.xcdatamodeld in Sources */,
+				D851FD842F3DD5D7007DB8B2 /* SavedBooksViewModel.swift in Sources */,
 				D85333812F28B18B003A88D5 /* GetRecipe.swift in Sources */,
 				D80219AC2F1E89AA00FAC8E4 /* ProfileView.swift in Sources */,
 				D80219A52F1E882300FAC8E4 /* SearchBarView.swift in Sources */,
@@ -468,8 +478,10 @@
 				D878BABD2F237FD800B0E93D /* HomeMealPage.swift in Sources */,
 				D8B746C02F30FC5E004B7573 /* SignInFormView.swift in Sources */,
 				D80219A32F1E87E200FAC8E4 /* HomeView.swift in Sources */,
+				D851FD822F3DD5A6007DB8B2 /* BookRepository.swift in Sources */,
 				D80219D22F1FD29300FAC8E4 /* ProfileHeaderView.swift in Sources */,
 				D8B746BA2F30F4F6004B7573 /* UserProfileSettings.swift in Sources */,
+				D851FD782F3DCEC5007DB8B2 /* CoreDataManager.swift in Sources */,
 				D80D70502F2B72D0008AE53B /* UserDataLogic.swift in Sources */,
 				D802197F2F1E2ED600FAC8E4 /* Recipe_BookApp.swift in Sources */,
 				D8B746BE2F30FA6D004B7573 /* GuestUserView.swift in Sources */,

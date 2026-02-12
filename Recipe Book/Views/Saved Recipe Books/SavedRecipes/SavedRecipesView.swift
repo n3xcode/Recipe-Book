@@ -10,32 +10,42 @@ import SwiftUI
 
 struct SavedRecipesView: View {
 
+    @StateObject private var vm = SavedBooksViewModel()
+
+    @State private var showAddAlert = false
+    @State private var showEditAlert = false
+    @State private var newBookName = ""
+    @State private var selectedBook: BookEntity?
+
     var body: some View {
         List {
             Section(header: Text("My Recipe Books")) {
-                ForEach(0..<3, id: \.self) { index in
+
+                ForEach(vm.books, id: \.objectID) { book in
 
                     NavigationLink {
-                        RecipeBookView(bookTitle: "Book \(index + 1)")
+                        RecipeBookView(bookTitle: book.name ?? "Untitled")
                     } label: {
                         RecipeBookRowView(
-                            title: "Book \(index + 1)",
-                            recipeCount: 5 + index
+                            title: book.name ?? "Untitled",
+                            recipeCount: book.recipe?.count ?? 0
                         )
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
 
-                        // Edit Book link to book name later
+                        // Edit
                         Button {
-                            print("Edit Book \(index + 1)")
+                            selectedBook = book
+                            newBookName = book.name ?? ""
+                            showEditAlert = true
                         } label: {
                             Label("Edit", systemImage: "pencil")
                         }
                         .tint(.blue)
 
-                        // Delete action
+                        // Delete
                         Button(role: .destructive) {
-                            print("Delete Book \(index + 1)")
+                            vm.deleteBook(book)
                         } label: {
                             Label("Delete", systemImage: "trash")
                         }
@@ -43,10 +53,42 @@ struct SavedRecipesView: View {
                 }
             }
         }
-        .listStyle(InsetGroupedListStyle())
-        .navigationBarTitle("My Recipes", displayMode: .large)
+        .listStyle(.insetGrouped)
+        .navigationTitle("My Recipes")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    newBookName = ""
+                    showAddAlert = true
+                } label: {
+                    Image(systemName: "plus")
+                }
+            }
+        }
+        .alert("New Book", isPresented: $showAddAlert) {
+            TextField("Book Name", text: $newBookName)
+
+            Button("Cancel", role: .cancel) {}
+
+            Button("Save") {
+                guard !newBookName.trimmingCharacters(in: .whitespaces).isEmpty else { return }
+                vm.addBook(name: newBookName)
+            }
+        }
+        .alert("Edit Book", isPresented: $showEditAlert) {
+            TextField("Book Name", text: $newBookName)
+
+            Button("Cancel", role: .cancel) {}
+
+            Button("Update") {
+                if let selectedBook {
+                    vm.updateBook(selectedBook, name: newBookName)
+                }
+            }
+        }
     }
 }
+
 
 struct SavedRecipesView_Previews: PreviewProvider {
     static var previews: some View {

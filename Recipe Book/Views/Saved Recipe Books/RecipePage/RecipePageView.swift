@@ -70,34 +70,6 @@ struct RecipePageView: View {
             }
         }
     }
-    
-    // MARK: Async Image Loader
-//    private func loadImageAsync() async {
-//
-//        await Task.detached(priority: .background) {
-//
-//            let documentsURL = FileManager.default.urls(for: .documentDirectory,
-//                                                        in: .userDomainMask)[0]
-//            let fileURL = documentsURL.appendingPathComponent(fileName)
-//
-//            var image: UIImage? = nil
-//
-//            // Only check if the file exists
-//            if FileManager.default.fileExists(atPath: fileURL.path) {
-//                image = UIImage(contentsOfFile: fileURL.path)
-//            }
-//
-//            // Update UI on main thread if we found the image
-//            if let image {
-//                await MainActor.run {
-//                    self.savedImage = image
-//                }
-//            }
-//            // If the image is nil (file missing), savedImage stays nil → placeholder shows
-//        }.value
-//    }
-
-
 }
 
 
