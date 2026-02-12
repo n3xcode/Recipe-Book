@@ -37,7 +37,7 @@ final class SaveRecipeImg: ObservableObject{
     
     //MARK: load Img
     //for now delete img in session later link to Meal img id in core data
-    var savedImage: UIImage? = nil
+    @Published var savedImage: UIImage? = nil
     
     func loadImageAsync(getImgId: String) async {
         
