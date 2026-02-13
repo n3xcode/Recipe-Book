@@ -34,13 +34,13 @@
 		D82F34F32F3C6CC50086373F /* ImageStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82F34F22F3C6CC50086373F /* ImageStorageManager.swift */; };
 		D8421F142F3F0D78007E6A5B /* RecipeRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8421F132F3F0D78007E6A5B /* RecipeRepository.swift */; };
 		D8421F162F3F0DA8007E6A5B /* SaveRecipeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8421F152F3F0DA8007E6A5B /* SaveRecipeCoordinator.swift */; };
-		D8421F182F3F0DC1007E6A5B /* BookPickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8421F172F3F0DC1007E6A5B /* BookPickerSheet.swift */; };
 		D851FD782F3DCEC5007DB8B2 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D851FD772F3DCEC5007DB8B2 /* CoreDataManager.swift */; };
 		D851FD822F3DD5A6007DB8B2 /* BookRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D851FD812F3DD5A6007DB8B2 /* BookRepository.swift */; };
 		D851FD842F3DD5D7007DB8B2 /* SavedBooksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D851FD832F3DD5D7007DB8B2 /* SavedBooksViewModel.swift */; };
 		D851FD882F3DE80C007DB8B2 /* CustomTextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = D851FD872F3DE80C007DB8B2 /* CustomTextFieldAlert.swift */; };
 		D85333812F28B18B003A88D5 /* GetRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85333802F28B18B003A88D5 /* GetRecipe.swift */; };
 		D85333842F28C946003A88D5 /* BasicErrorHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85333832F28C946003A88D5 /* BasicErrorHandling.swift */; };
+		D86D2C972F3F3638006D00CB /* BookPickerAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86D2C962F3F3638006D00CB /* BookPickerAlert.swift */; };
 		D878BABB2F237B4A00B0E93D /* HomePageRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D878BABA2F237B4A00B0E93D /* HomePageRecipeView.swift */; };
 		D878BABD2F237FD800B0E93D /* HomeMealPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D878BABC2F237FD800B0E93D /* HomeMealPage.swift */; };
 		D8B746B62F30C0E6004B7573 /* Profile Avatar Images in Resources */ = {isa = PBXBuildFile; fileRef = D8B746B52F30C0E6004B7573 /* Profile Avatar Images */; };
@@ -85,13 +85,13 @@
 		D82F34F22F3C6CC50086373F /* ImageStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStorageManager.swift; sourceTree = "<group>"; };
 		D8421F132F3F0D78007E6A5B /* RecipeRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeRepository.swift; sourceTree = "<group>"; };
 		D8421F152F3F0DA8007E6A5B /* SaveRecipeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveRecipeCoordinator.swift; sourceTree = "<group>"; };
-		D8421F172F3F0DC1007E6A5B /* BookPickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookPickerSheet.swift; sourceTree = "<group>"; };
 		D851FD772F3DCEC5007DB8B2 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		D851FD812F3DD5A6007DB8B2 /* BookRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookRepository.swift; sourceTree = "<group>"; };
 		D851FD832F3DD5D7007DB8B2 /* SavedBooksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedBooksViewModel.swift; sourceTree = "<group>"; };
 		D851FD872F3DE80C007DB8B2 /* CustomTextFieldAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextFieldAlert.swift; sourceTree = "<group>"; };
 		D85333802F28B18B003A88D5 /* GetRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRecipe.swift; sourceTree = "<group>"; };
 		D85333832F28C946003A88D5 /* BasicErrorHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicErrorHandling.swift; sourceTree = "<group>"; };
+		D86D2C962F3F3638006D00CB /* BookPickerAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookPickerAlert.swift; sourceTree = "<group>"; };
 		D878BABA2F237B4A00B0E93D /* HomePageRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageRecipeView.swift; sourceTree = "<group>"; };
 		D878BABC2F237FD800B0E93D /* HomeMealPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMealPage.swift; sourceTree = "<group>"; };
 		D88AB9B62F31D37D000C8CE6 /* Recipe-Book-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Recipe-Book-Info.plist"; path = "Recipe Book/Supporting Files/Recipe-Book-Info.plist"; sourceTree = SOURCE_ROOT; };
@@ -299,7 +299,7 @@
 				D80219A62F1E88A900FAC8E4 /* RecipeTileView.swift */,
 				D878BABA2F237B4A00B0E93D /* HomePageRecipeView.swift */,
 				D8BD04082F31EDCC00AD6BD0 /* SearchResultsElements.swift */,
-				D8421F172F3F0DC1007E6A5B /* BookPickerSheet.swift */,
+				D86D2C962F3F3638006D00CB /* BookPickerAlert.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -495,7 +495,6 @@
 				D80219D22F1FD29300FAC8E4 /* ProfileHeaderView.swift in Sources */,
 				D8B746BA2F30F4F6004B7573 /* UserProfileSettings.swift in Sources */,
 				D8421F162F3F0DA8007E6A5B /* SaveRecipeCoordinator.swift in Sources */,
-				D8421F182F3F0DC1007E6A5B /* BookPickerSheet.swift in Sources */,
 				D851FD782F3DCEC5007DB8B2 /* CoreDataManager.swift in Sources */,
 				D80D70502F2B72D0008AE53B /* UserDataLogic.swift in Sources */,
 				D802197F2F1E2ED600FAC8E4 /* Recipe_BookApp.swift in Sources */,
@@ -513,6 +512,7 @@
 				D80D70522F2B7725008AE53B /* SharedElements.swift in Sources */,
 				D80D70582F2B7811008AE53B /* Color&Themes.swift in Sources */,
 				D80219DE2F20D32E00FAC8E4 /* AppEnvironment.swift in Sources */,
+				D86D2C972F3F3638006D00CB /* BookPickerAlert.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

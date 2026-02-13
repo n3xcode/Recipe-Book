@@ -5,7 +5,6 @@
 //  Created by Grizzowl on 2026/02/12.
 //
 
-import SwiftUI
 import CoreData
 
 final class SavedBooksViewModel: ObservableObject {

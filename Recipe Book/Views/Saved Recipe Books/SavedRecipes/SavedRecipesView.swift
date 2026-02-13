@@ -66,7 +66,10 @@ struct SavedRecipesView: View {
                     }
                 }
             }
-
+            .onAppear {
+                vm.loadBooks()
+            }
+            
             // MARK: - Add Book Alert
             if showAddAlert {
                 CustomTextFieldAlert(

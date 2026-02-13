@@ -7,7 +7,7 @@
 
 import CoreData
 
-final class BookRepository {
+final class BookRepository: ObservableObject {
 
     private let context = CoreDataManager.shared.context
 
