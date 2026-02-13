@@ -11,14 +11,15 @@ struct HomeMealPage: Identifiable, Hashable {
     let id: String
     let title: String
     let thumbnail: String
-    let subtitle: String
+    let area: String
 }
 
 struct SelectedMealPage: Identifiable {
     let id: String
     let title: String
     let thumbnail: String
-    let subtitle: String
+    let area: String
+    let category: String?
     let instructions: String
     let ingredients: [GetHomePageRecipes.Ingredient]
 }
@@ -29,7 +30,7 @@ extension GetHomePageRecipes {
             id: id,
             title: name,
             thumbnail: thumbnail ?? "",
-            subtitle: area ?? ""
+            area: area ?? ""
         )
     }
 }
@@ -40,7 +41,8 @@ extension GetHomePageRecipes {
             id: id,
             title: name,
             thumbnail: thumbnail ?? "",
-            subtitle: area ?? "",
+            area: area ?? "",
+            category: category ?? "",
             instructions: instructions ?? "",
             ingredients: ingredients
         )

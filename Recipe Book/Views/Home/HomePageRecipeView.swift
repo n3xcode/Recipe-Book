@@ -12,6 +12,11 @@ struct HomePageRecipeView: View {
     let mealID: String
     @StateObject private var vm = RecipeDetailViewModel()
     @StateObject private var svImg = SaveRecipeImg()
+    @StateObject private var booksVM = SavedBooksViewModel()
+    @State private var showBookPicker = false
+    @State private var showDuplicateAlert = false
+    @State private var selectedBook: BookEntity?
+    private let saveCoordinator = SaveRecipeCoordinator()
     
     var body: some View {
         ScrollView {
@@ -63,10 +68,8 @@ struct HomePageRecipeView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    svImg.saveImageToDisk(getRecipeImgUrl: vm.recipe!.thumbnail)
-                    //saveMeal() to core data
+                    showBookPicker = true
                 } label: {
-                    //check if id is saved toggle
                     Image(systemName: svImg.isBookmarked ? "bookmark.fill" : "bookmark")
                 }
             }
@@ -74,7 +77,55 @@ struct HomePageRecipeView: View {
         .task {
             await vm.fetchRecipe(by: mealID)
         }
+        .sheet(isPresented: $showBookPicker) {
+            BookPickerSheet(vm: booksVM) { book in
+                selectedBook = book
+
+                guard let thumbnailURL = vm.recipe?.thumbnail,
+                      let fileName = URL(string: thumbnailURL)?.lastPathComponent else {
+                    return
+                }
+
+                let result = saveCoordinator.handleSave(
+                    vm: vm,
+                    book: book,
+                    thumbnailFileName: fileName,
+                    allowDuplicate: false
+                )
+
+                switch result {
+                case .duplicateFound:
+                    showDuplicateAlert = true
+                case .success:
+                    svImg.saveImageToDisk(getRecipeImgUrl: thumbnailURL)
+                case .failed:
+                    break
+                }
+            }
+        }
+        .alert("Recipe already exists in this book. Save duplicate?",
+               isPresented: $showDuplicateAlert) {
+
+            Button("Cancel", role: .cancel) {}
+
+            Button("Save Anyway") {
+                guard let book = selectedBook,
+                      let thumbnailURL = vm.recipe?.thumbnail,
+                      let fileName = URL(string: thumbnailURL)?.lastPathComponent else { return }
+
+                _ = saveCoordinator.handleSave(
+                    vm: vm,
+                    book: book,
+                    thumbnailFileName: fileName,
+                    allowDuplicate: true
+                )
+
+                svImg.saveImageToDisk(getRecipeImgUrl: thumbnailURL)
+            }
+        }
+
     }
+    
 }
 
 

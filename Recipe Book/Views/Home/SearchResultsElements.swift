@@ -24,7 +24,7 @@ struct SearchResultsDropdown: View {
                                 .font(.headline)
                                 .foregroundColor(.gray)
                             
-                            Text(meal.subtitle)
+                            Text(meal.area)
                                 .font(.subheadline)
                                 .foregroundColor(.gray)
                         }

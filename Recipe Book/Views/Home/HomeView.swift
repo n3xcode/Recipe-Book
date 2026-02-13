@@ -55,7 +55,7 @@ struct HomeView: View {
                                 ) {
                                     RecipeTileView(
                                         title: meal.title,
-                                        subtitle: meal.subtitle,
+                                        subtitle: meal.area,
                                         imageName: meal.thumbnail
                                     )
                                 }

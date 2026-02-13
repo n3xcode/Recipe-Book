@@ -43,6 +43,6 @@ extension HomeMealPage {
         id: "no_results",
         title: "No Matching Results",
         thumbnail: "",
-        subtitle: "Try a different search"
+        area: "Try a different search"
     )
 }

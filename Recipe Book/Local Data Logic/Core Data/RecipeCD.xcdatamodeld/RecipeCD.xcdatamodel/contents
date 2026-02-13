@@ -8,13 +8,16 @@
     </entity>
     <entity name="RecipeEntity" representedClassName="RecipeEntity" syncable="YES" codeGenerationType="class">
         <attribute name="area" optional="YES" attributeType="String"/>
+        <attribute name="bookID" optional="YES" attributeType="String"/>
         <attribute name="category" optional="YES" attributeType="String"/>
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="String"/>
-        <attribute name="ingredients" optional="YES" attributeType="String"/>
+        <attribute name="ingredientMeasure" optional="YES" attributeType="String"/>
+        <attribute name="ingredientName" optional="YES" attributeType="String"/>
         <attribute name="instructions" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="thumbnail" optional="YES" attributeType="String"/>
-        <relationship name="book" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BookEntity" inverseName="recipe" inverseEntity="BookEntity"/>
+        <attribute name="userId" optional="YES" attributeType="String"/>
+        <relationship name="book" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BookEntity" inverseName="recipe" inverseEntity="BookEntity"/>
     </entity>
 </model>
