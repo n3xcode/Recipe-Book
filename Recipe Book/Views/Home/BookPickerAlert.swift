@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct BookPickerAlert: View {
 
@@ -95,5 +96,3 @@ struct BookPickerAlert: View {
         }
     }
 }
-
-

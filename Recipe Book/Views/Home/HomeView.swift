@@ -14,12 +14,10 @@ struct HomeView: View {
     @State private var searchText: String = ""
 
     init() {
-        let homeVM = HomePageRecipeViewModel()
-        _vm = StateObject(wrappedValue: homeVM)
-        _searchVM = StateObject(
-            wrappedValue: MealSearchViewModel(api: homeVM.api)
-        )
-    }
+            let api = MealAPI()
+            _vm = StateObject(wrappedValue: HomePageRecipeViewModel(api: api))
+            _searchVM = StateObject(wrappedValue: MealSearchViewModel(api: api))
+        }
 
     var body: some View {
         NavigationView {

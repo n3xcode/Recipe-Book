@@ -60,7 +60,11 @@ final class HomePageRecipeViewModel: ObservableObject {
     @Published var homeMeals: [HomeMealPage] = []
     @Published var errorMessage: String?
 
-    let api = MealAPI()
+    private let api: MealAPI
+
+    init(api: MealAPI) {
+        self.api = api
+    }
     
     private var hasLoaded = false
     private var fetchTask: Task<Void, Never>? = nil
