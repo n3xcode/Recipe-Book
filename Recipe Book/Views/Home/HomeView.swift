@@ -12,110 +12,105 @@ struct HomeView: View {
     @StateObject private var vm: HomePageRecipeViewModel
     @StateObject private var searchVM: MealSearchViewModel
     @State private var searchText: String = ""
+
     private var isOverlayActive: Bool {
         !searchText.isEmpty
     }
 
     init() {
-            let api = MealAPI()
-            _vm = StateObject(wrappedValue: HomePageRecipeViewModel(api: api))
-            _searchVM = StateObject(wrappedValue: MealSearchViewModel(api: api))
-        }
+        let api = MealAPI()
+        _vm = StateObject(wrappedValue: HomePageRecipeViewModel(api: api))
+        _searchVM = StateObject(wrappedValue: MealSearchViewModel(api: api))
+    }
 
     var body: some View {
-        NavigationView {
-            ZStack(alignment: .top) {
+        ZStack(alignment: .top) {
 
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 20) {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
 
-                        // Search bar (stays in layout)
-                        VStack(alignment: .leading, spacing: 6) {
-                            SearchBarView(searchText: $searchText)
-                                .onChange(of: searchText) { newValue in
-                                    searchVM.onQueryChange(newValue)
-                                }
-                        }
-                        .padding(.horizontal)
-
-                        Text("Meals of the Day")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                            .padding(.horizontal)
-
-                        LazyVGrid(
-                            columns: [
-                                GridItem(.flexible(), spacing: 20),
-                                GridItem(.flexible(), spacing: 20)
-                            ],
-                            spacing: 35
-                        ) {
-                            ForEach(vm.homeMeals) { meal in
-                                NavigationLink(
-                                    destination: HomePageRecipeView(mealID: meal.id)
-                                ) {
-                                    RecipeTileView(
-                                        title: meal.title,
-                                        subtitle: meal.area,
-                                        imageName: meal.thumbnail
-                                    )
-                                }
+                    VStack(alignment: .leading, spacing: 6) {
+                        SearchBarView(searchText: $searchText)
+                            .onChange(of: searchText) { newValue in
+                                searchVM.onQueryChange(newValue)
                             }
-
-                            if vm.homeMeals.isEmpty {
-                                ForEach(0..<4, id: \.self) { _ in
-                                    RecipeTileView(
-                                        title: "Loading...",
-                                        subtitle: "",
-                                        imageName: ""
-                                    )
-                                    .redacted(reason: .placeholder)
-                                }
-                            }
-                        }
-                        .padding(.horizontal)
                     }
-                    .padding(.top, 8)
-                }
-
-                // Dismiss the search overlay
-                if !searchText.isEmpty {
-                    Color.black
-                        .opacity(0.001)
-                        .ignoresSafeArea()
-                        .onTapGesture {
-                            searchText = ""
-                            searchVM.results = []
-                            //dismissKeyboard()
-                        }
-                        .zIndex(1)
-                }
-
-                if !searchText.isEmpty {
-                    SearchResultsDropdown(
-                        meals: searchVM.results,
-                        query: searchText,
-                        onSelect: { _ in
-                            searchText = ""
-                            searchVM.results = []
-                            //dismissKeyboard()
-                        }
-                    )
                     .padding(.horizontal)
-                    .padding(.top, 70)
-                    .zIndex(2)
-                }
 
+                    Text("Meals of the Day")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .padding(.horizontal)
+
+                    LazyVGrid(
+                        columns: [
+                            GridItem(.flexible(), spacing: 20),
+                            GridItem(.flexible(), spacing: 20)
+                        ],
+                        spacing: 35
+                    ) {
+                        ForEach(vm.homeMeals) { meal in
+                            NavigationLink(
+                                destination: HomePageRecipeView(mealID: meal.id)
+                            ) {
+                                RecipeTileView(
+                                    title: meal.title,
+                                    subtitle: meal.area,
+                                    imageName: meal.thumbnail
+                                )
+                            }
+                        }
+
+                        if vm.homeMeals.isEmpty {
+                            ForEach(0..<4, id: \.self) { _ in
+                                RecipeTileView(
+                                    title: "Loading...",
+                                    subtitle: "",
+                                    imageName: ""
+                                )
+                                .redacted(reason: .placeholder)
+                            }
+                        }
+                    }
+                    .padding(.horizontal)
+                }
+                .padding(.top, 8)
             }
-            .navigationTitle("")
-            .refreshable {
-                if !isOverlayActive { await vm.refreshHomeMeals() }
+
+            if !searchText.isEmpty {
+                Color.black
+                    .opacity(0.001)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        searchText = ""
+                        searchVM.results = []
+                    }
+                    .zIndex(1)
             }
-            .task {
-                await vm.loadHomeMealsIfNeeded()
+
+            if !searchText.isEmpty {
+                SearchResultsDropdown(
+                    meals: searchVM.results,
+                    query: searchText,
+                    onSelect: { _ in
+                        searchText = ""
+                        searchVM.results = []
+                    }
+                )
+                .padding(.horizontal)
+                .padding(.top, 70)
+                .zIndex(2)
             }
         }
-        Spacer()
+        .navigationTitle("Home")
+        .refreshable {
+            if !isOverlayActive {
+                await vm.refreshHomeMeals()
+            }
+        }
+        .task {
+            await vm.loadHomeMealsIfNeeded()
+        }
     }
 }
 

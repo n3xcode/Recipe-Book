@@ -75,68 +75,72 @@ final class HomePageRecipeViewModel: ObservableObject {
     }
 
     func loadHomeMeals() async {
-        // Cancel any existing fetch
         fetchTask?.cancel()
         
         fetchTask = Task { [weak self] in
             guard let self = self else { return }
             
             await MainActor.run { self.errorMessage = nil }
-            var seenIDs = Set<String>()
             
             do {
-                //let categories = ["Chicken", "Seafood", "Dessert"] *user selections WIP*
+                let categories = ["Chicken", "Seafood", "Dessert"] // your chosen categories
                 
-                // concurrent calls
-                async let chickenMeals = self.api.fetchMeals(from: .byCategory("Chicken"))
-                async let seafoodMeals = self.api.fetchMeals(from: .byCategory("Seafood"))
-                async let dessertMeals = self.api.fetchMeals(from: .byCategory("Dessert"))
+                var seenIDs = Set<String>()
+                var orderedMeals: [SelectedMealPage] = []
                 
-                let categoryResults = try await [chickenMeals, seafoodMeals, dessertMeals]
-                
-                // Prepare lookup tasks for random meal per category
-                var lookupTasks: [Task<SelectedMealPage?, Never>] = []
-                
-                for meals in categoryResults {
-                    if let randomMeal = meals.randomElement(),
-                       !seenIDs.contains(randomMeal.id) {
-                        seenIDs.insert(randomMeal.id)
-                        
-                        let task = Task { () -> SelectedMealPage? in
-                            try? await self.api.fetchMeals(from: .lookup(randomMeal.id))
-                                .first?.selectedRecipe
-                        }
-                        lookupTasks.append(task)
-                    }
-                }
-                
-                //TheMealDB API doesn’t support fetching by index within a category
-                // Fetch random meal concurrently
-                let randomMeals = try await self.api.fetchMeals(from: .random)
-                if let randomMeal = randomMeals.first,
-                   !seenIDs.contains(randomMeal.id) {
-                    seenIDs.insert(randomMeal.id)
+                // first tile .random
+                if let randomMeal = try await self.api.fetchMeals(from: .random).first,
+                   !seenIDs.contains(randomMeal.id),
+                   let fullMeal = try await self.api
+                        .fetchMeals(from: .lookup(randomMeal.id))
+                        .first?.selectedRecipe {
                     
-                    let randomTask = Task { () -> SelectedMealPage? in
-                        try? await self.api.fetchMeals(from: .lookup(randomMeal.id))
-                            .first?.selectedRecipe
-                    }
-                    lookupTasks.insert(randomTask, at: 0) // insert random meal first
+                    seenIDs.insert(randomMeal.id)
+                    orderedMeals.append(fullMeal)   // ALWAYS first
                 }
 
-                var fullMeals: [SelectedMealPage] = []
-
-                for task in lookupTasks {
-                    if let meal = await task.value {
-                        fullMeals.append(meal)
+                // logs order
+                for category in categories {
+                    
+                    let meals = try await self.api.fetchMeals(from: .byCategory(category))
+                    
+                    var foundUnique = false
+                    var attempts = 0
+                    
+                    while !foundUnique && attempts < 10 {
+                        attempts += 1
+                        
+                        guard let candidate = meals.randomElement() else { break }
+                        
+                        if !seenIDs.contains(candidate.id),
+                           let fullMeal = try await self.api
+                                .fetchMeals(from: .lookup(candidate.id))
+                                .first?.selectedRecipe {
+                            
+                            seenIDs.insert(candidate.id)
+                            orderedMeals.append(fullMeal)   // appended in category order
+                            foundUnique = true
+                        }
+                    }
+                }
+                
+                // keeps order of tiles after new recipe is fetched
+                while orderedMeals.count < 4 {
+                    if let randomMeal = try await self.api.fetchMeals(from: .random).first,
+                       !seenIDs.contains(randomMeal.id),
+                       let fullMeal = try await self.api
+                            .fetchMeals(from: .lookup(randomMeal.id))
+                            .first?.selectedRecipe {
+                        
+                        seenIDs.insert(randomMeal.id)
+                        orderedMeals.append(fullMeal)
                     }
                 }
 
+                let finalMeals = Array(orderedMeals.prefix(4))
+                
                 await MainActor.run {
-                    self.homeMeals = fullMeals
-                    if fullMeals.isEmpty {
-                        self.errorMessage = "No meals found. Pull to refresh."
-                    }
+                    self.homeMeals = finalMeals
                 }
                 
             } catch is CancellationError {
@@ -145,12 +149,14 @@ final class HomePageRecipeViewModel: ObservableObject {
                 await MainActor.run {
                     self.errorMessage = "Failed to load home meals. Pull to refresh."
                 }
-                print("Failed to load meals:", error)
+                print("Failed:", error)
             }
         }
-
+        
         await fetchTask?.value
     }
+
+
     
     func refreshHomeMeals() async {
         await loadHomeMeals()

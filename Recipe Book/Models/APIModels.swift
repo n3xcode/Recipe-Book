@@ -44,6 +44,13 @@ enum MealEndpoint {
     }
 }
 
+enum HomeTileFilter {
+    case category(String)
+    case area(String)
+    case ingredient(String)
+    case random
+}
+
 //MARK: Meal JSON Models
 struct MealsResponse: Decodable {
     let meals: [GetHomePageRecipes]
