@@ -8,47 +8,43 @@
 import SwiftUI
 
 struct SearchResultsDropdown: View {
-
+    
     let meals: [HomeMealPage]
     let query: String
     let onSelect: (HomeMealPage) -> Void // parent handles clearing search
-
+    
     var body: some View {
-        ScrollView {
-            VStack(spacing: 0) {
-                ForEach(meals) { meal in
-                    if meal.id == "no_results" {
-                        // No results placeholder
-                        VStack {
-                            Text(meal.title)
-                                .font(.headline)
-                                .foregroundColor(.gray)
-                            
-                            Text(meal.area)
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-                        }
-                        .padding()
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(8)
-                        .frame(maxWidth: .infinity)  // Ensure it spans full width
-                    } else {
-                        // Regular result cell
-                        NavigationLink(
-                            destination: HomePageRecipeView(mealID: meal.id)
-                                .onAppear {
-                                    // parent decides what to do when navigation occurs
-                                    onSelect(meal)
-                                }
-                        ) {
-                            SearchResultRow(meal: meal, query: query)
-                        }
+        List {
+            ForEach(meals) { meal in
+                if meal.id == "no_results" {
+                    VStack {
+                        Text(meal.title)
+                            .font(.headline)
+                            .foregroundColor(.gray)
+                        
+                        Text(meal.area)
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
                     }
-                    Divider()
+                    .frame(maxWidth: .infinity)
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
+                    
+                } else {
+                    NavigationLink(
+                        destination: HomePageRecipeView(mealID: meal.id)
+                            .onAppear {
+                                onSelect(meal)
+                            }
+                    ) {
+                        SearchResultRow(meal: meal, query: query)
+                    }
                 }
             }
         }
+        .listStyle(.plain)
         .frame(maxHeight: 280)
+        .scrollContentBackground(.hidden) // for custom background
         .background(Color(.systemBackground))
         .cornerRadius(12)
         .shadow(radius: 6)

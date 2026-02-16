@@ -19,7 +19,7 @@ struct RecipeTileView: View {
             ZStack {
                 Rectangle()
                     .fill(Color.gray.opacity(0.3))
-                    .frame(height: 120)
+                    .frame(width: 160, height: 160)
                     .cornerRadius(12)
                 
                 AsyncImage(url: URL(string: imageName)) { phase in
@@ -31,14 +31,16 @@ struct RecipeTileView: View {
                         image
                             .resizable()
                             .scaledToFill()
-                            .frame(height: 140)
+                            .frame(width: 160, height: 160) // height fixed
+                            .frame(maxWidth: .infinity) // width auto
                             .clipped()
+                            .cornerRadius(15)
                         
                     case .failure:
                         Image(systemName: "photo") // fallback icon
                             .resizable()
                             .scaledToFit()
-                            .frame(height: 140)
+                            .frame(width: 160, height: 160)
                             .foregroundColor(.gray)
                         
                     @unknown default:
@@ -49,7 +51,14 @@ struct RecipeTileView: View {
             
             Text(title)
                 .font(.headline)
-                .lineLimit(2)
+                .foregroundStyle(
+                    .linearGradient(
+                        colors: [.black, .orange],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+                .lineLimit(1)
             
             Text(subtitle)
                 .font(.caption)
@@ -63,8 +72,8 @@ struct RecipeTileView: View {
 struct RecipeTileView_Previews: PreviewProvider {
     static var previews: some View {
         RecipeTileView(title: "Jamaican Curry Chicken Recipe", subtitle: "Jamaican", imageName: "https://www.themealdb.com/images/media/meals/o5fuq51764789643.jpg")
-        .padding()
-        .previewLayout(.sizeThatFits)
+            .padding()
+            .previewLayout(.sizeThatFits)
     }
 }
 

@@ -12,6 +12,9 @@ struct HomeView: View {
     @StateObject private var vm: HomePageRecipeViewModel
     @StateObject private var searchVM: MealSearchViewModel
     @State private var searchText: String = ""
+    private var isOverlayActive: Bool {
+        !searchText.isEmpty
+    }
 
     init() {
             let api = MealAPI()
@@ -42,8 +45,8 @@ struct HomeView: View {
 
                         LazyVGrid(
                             columns: [
-                                GridItem(.flexible()),
-                                GridItem(.flexible())
+                                GridItem(.flexible(), spacing: 20),
+                                GridItem(.flexible(), spacing: 20)
                             ],
                             spacing: 35
                         ) {
@@ -106,12 +109,13 @@ struct HomeView: View {
             }
             .navigationTitle("")
             .refreshable {
-                await vm.refreshHomeMeals()
+                if !isOverlayActive { await vm.refreshHomeMeals() }
             }
             .task {
                 await vm.loadHomeMealsIfNeeded()
             }
         }
+        Spacer()
     }
 }
 

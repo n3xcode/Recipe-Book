@@ -7,7 +7,7 @@
 
 import Foundation
 
-//MARK: API Endpoints
+//MARK: Endpoints
 enum MealEndpoint {
     case random
     case search(String)
@@ -44,7 +44,7 @@ enum MealEndpoint {
     }
 }
 
-//MARK: Meal JSON API Models
+//MARK: Meal JSON Models
 struct MealsResponse: Decodable {
     let meals: [GetHomePageRecipes]
 }

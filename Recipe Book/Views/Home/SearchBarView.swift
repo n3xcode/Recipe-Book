@@ -16,7 +16,11 @@ struct SearchBarView: View {
             Image(systemName: "magnifyingglass")
                 .foregroundColor(.secondary)
 
-            TextField("Search recipes...", text: $searchText)
+            TextField("", text: $searchText)
+                .placeholder(when: searchText.isEmpty) {
+                        Text("Search recipes...")
+                        .foregroundColor(.orange)
+                    }
 
             if !searchText.isEmpty {
                 Button(action: {
