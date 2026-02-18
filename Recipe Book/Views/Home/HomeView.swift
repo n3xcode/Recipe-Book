@@ -111,6 +111,7 @@ struct HomeView: View {
         .task {
             await vm.loadHomeMealsIfNeeded()
         }
+        Spacer()
     }
 }
 
