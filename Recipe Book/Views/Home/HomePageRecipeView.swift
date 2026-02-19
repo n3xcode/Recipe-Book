@@ -124,6 +124,8 @@ struct HomePageRecipeView: View {
                 )
                 
                 svImg.saveImageToDisk(getRecipeImgUrl: thumbnailURL)
+
+                showBookPicker = false
             }
         }
     }

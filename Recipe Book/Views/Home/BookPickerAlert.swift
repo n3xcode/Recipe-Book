@@ -43,7 +43,15 @@ struct BookPickerAlert: View {
                                 HStack {
                                     Text(book.name ?? "Untitled")
                                         .foregroundColor(.primary)
+
                                     Spacer()
+
+                                    Image(systemName: "plus")
+                                        .font(.system(size: 14, weight: .bold))
+                                        .foregroundColor(.white)
+                                        .frame(width: 28, height: 28)
+                                        .background(Color.blue)
+                                        .clipShape(Circle())
                                 }
                                 .padding()
                                 .background(Color(.systemGray6))
