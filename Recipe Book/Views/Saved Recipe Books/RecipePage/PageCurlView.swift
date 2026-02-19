@@ -10,7 +10,13 @@ import UIKit
 
 struct PageCurlView<Page: View>: UIViewControllerRepresentable {
 
-    let pages: [Page]
+    let count: Int
+    @Binding var currentIndex: Int
+    let content: (Int) -> Page
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(parent: self)
+    }
 
     func makeUIViewController(context: Context) -> UIPageViewController {
 
@@ -21,63 +27,83 @@ struct PageCurlView<Page: View>: UIViewControllerRepresentable {
         )
 
         controller.dataSource = context.coordinator
+        controller.delegate = context.coordinator
 
-        if let first = context.coordinator.controllers.first {
-            controller.setViewControllers(
-                [first],
-                direction: .forward,
-                animated: false
-            )
+        if count > 0 {
+            let first = context.coordinator.controller(for: 0)
+            controller.setViewControllers([first], direction: .forward, animated: false)
         }
 
         return controller
     }
 
-    func updateUIViewController(
-        _ uiViewController: UIPageViewController,
-        context: Context
-    ) {
-        // No-op for now
-    }
-
-    func makeCoordinator() -> Coordinator {
-        Coordinator(pages: pages)
+    func updateUIViewController(_ uiViewController: UIPageViewController, context: Context) {
+        // No-op
     }
 
     // MARK: - Coordinator
 
-    class Coordinator: NSObject, UIPageViewControllerDataSource {
+    class Coordinator: NSObject, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
 
-        let controllers: [UIViewController]
+        var parent: PageCurlView
+        private var controllers: [Int: UIViewController] = [:]
 
-        init(pages: [Page]) {
-            self.controllers = pages.map {
-                UIHostingController(rootView: $0)
-            }
+        init(parent: PageCurlView) {
+            self.parent = parent
         }
+
+        func controller(for index: Int) -> UIViewController {
+            if let existing = controllers[index] {
+                return existing
+            }
+
+            let hosting = UIHostingController(
+                rootView: parent.content(index)
+            )
+
+            controllers[index] = hosting
+            return hosting
+        }
+
+        // MARK: DataSource
 
         func pageViewController(
             _ pageViewController: UIPageViewController,
             viewControllerBefore viewController: UIViewController
         ) -> UIViewController? {
-            guard
-                let index = controllers.firstIndex(of: viewController),
-                index > 0
-            else { return nil }
 
-            return controllers[index - 1]
+            guard let index = controllers.first(where: { $0.value == viewController })?.key,
+                  index > 0 else { return nil }
+
+            return controller(for: index - 1)
         }
 
         func pageViewController(
             _ pageViewController: UIPageViewController,
             viewControllerAfter viewController: UIViewController
         ) -> UIViewController? {
-            guard
-                let index = controllers.firstIndex(of: viewController),
-                index < controllers.count - 1
-            else { return nil }
 
-            return controllers[index + 1]
+            guard let index = controllers.first(where: { $0.value == viewController })?.key,
+                  index < parent.count - 1 else { return nil }
+
+            return controller(for: index + 1)
+        }
+
+        // MARK: Delegate
+
+        func pageViewController(
+            _ pageViewController: UIPageViewController,
+            didFinishAnimating finished: Bool,
+            previousViewControllers: [UIViewController],
+            transitionCompleted completed: Bool
+        ) {
+            guard completed,
+                  let visible = pageViewController.viewControllers?.first,
+                  let index = controllers.first(where: { $0.value == visible })?.key
+            else { return }
+
+            parent.currentIndex = index
         }
     }
 }
+

@@ -8,27 +8,20 @@
 import SwiftUI
 
 struct RecipePageView: View {
-    
-    @StateObject private var vm = RecipeDetailViewModel()
-    //private var getImgId = vm.recipe
-    @StateObject private var svImg = SaveRecipeImg()
-    let recipeIndex: Int
-    
-    // For testing, using hardcoded URL as "filename"
-    //
-    var hasFileName: String = "o5fuq51764789643.jpg"
+
+    let recipe: RecipeEntity
+    let image: UIImage?
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
 
-                Text("Recipe \(recipeIndex + 1)")
+                Text(recipe.name ?? "Untitled")
                     .font(.largeTitle)
                     .fontWeight(.bold)
 
-                // Conditional image
-                if svImg.savedImage != nil {
-                    Image(uiImage: svImg.savedImage!)
+                if let image {
+                    Image(uiImage: image)
                         .resizable()
                         .scaledToFill()
                         .frame(height: 200)
@@ -45,8 +38,8 @@ struct RecipePageView: View {
                     .font(.title2)
                     .fontWeight(.semibold)
 
-                ForEach(0..<5, id: \.self) { _ in
-                    Text("• Ingredient item")
+                ForEach(parseIngredients(recipe), id: \.self) { item in
+                    Text("• \(item)")
                 }
 
                 Divider()
@@ -55,27 +48,22 @@ struct RecipePageView: View {
                     .font(.title2)
                     .fontWeight(.semibold)
 
-                ForEach(0..<4, id: \.self) { step in
-                    Text("\(step + 1). Instruction step goes here.")
-                }
+                Text(recipe.instructions ?? "")
             }
             .padding()
         }
-        // Async load only when view appears
-        .task {
-            if (hasFileName != "") {
-                await svImg.loadImageAsync(getImgId: hasFileName)
-                print("if = \(hasFileName)")
-            } else {
-                print("Thumbnail is nil. Recipe:", "else = \(hasFileName)")
-            }
-        }
+    }
+    private func parseIngredients(_ recipe: RecipeEntity) -> [String] {
+        let names = recipe.ingredientName?.components(separatedBy: "|") ?? []
+        let measures = recipe.ingredientMeasure?.components(separatedBy: "|") ?? []
+        return zip(measures, names).map { "\($0) \($1)" }
     }
 }
 
 
-struct RecipePageView_Previews: PreviewProvider {
-    static var previews: some View {
-        RecipePageView(recipeIndex: 0, hasFileName: "o5fuq51764789643.jpg")
-    }
-}
+
+//struct RecipePageView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        RecipePageView()
+//    }
+//}

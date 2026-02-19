@@ -68,4 +68,14 @@ final class RecipeRepository {
             }
         }
     }
+    
+    func fetchRecipes(for book: BookEntity) -> [RecipeEntity] {
+        let request: NSFetchRequest<RecipeEntity> = RecipeEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "book == %@", book)
+        request.sortDescriptors = [
+            NSSortDescriptor(key: "date", ascending: true)
+        ]
+
+        return (try? context.fetch(request)) ?? []
+    }
 }

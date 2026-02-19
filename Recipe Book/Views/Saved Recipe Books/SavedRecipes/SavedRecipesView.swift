@@ -25,7 +25,7 @@ struct SavedRecipesView: View {
                     ForEach(vm.books, id: \.objectID) { book in
 
                         NavigationLink {
-                            RecipeBookView(bookTitle: book.name ?? "Untitled")
+                            RecipeBookView(book: book)
                         } label: {
                             RecipeBookRowView(
                                 title: book.name ?? "Untitled",
