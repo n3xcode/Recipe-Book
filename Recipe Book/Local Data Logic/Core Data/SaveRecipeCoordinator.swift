@@ -14,29 +14,34 @@ final class SaveRecipeCoordinator {
     @MainActor func handleSave(
         vm: RecipeDetailViewModel,
         book: BookEntity,
-        thumbnailFileName: String,
+        saveImgVM: SaveRecipeImg,
         allowDuplicate: Bool
-    ) -> SaveResult {
+    ) async -> SaveResult { // 1. Added 'async' here
 
-        guard let recipeID = vm.recipe?.id,
+        guard let recipe = vm.recipe,
               let bookID = book.id else {
             return .failed
         }
 
-        let exists = recipeRepo.recipeExists(
-            recipeID: recipeID,
-            in: bookID
-        )
+        let exists = recipeRepo.recipeExists(recipeID: recipe.id, in: bookID)
 
         if exists && !allowDuplicate {
             return .duplicateFound
         }
 
+        // Extract the filename
+        guard let url = URL(string: recipe.thumbnail) else { return .failed }
+        let fileName = url.lastPathComponent
+
+        // Save the metadata to Core Data
         recipeRepo.saveRecipe(
             from: vm,
             into: book,
-            thumbnailFileName: thumbnailFileName
+            thumbnailFileName: fileName
         )
+
+        // 2. Added 'await' here since saveImageToDisk is now async
+        await saveImgVM.saveImageToDisk(getRecipeImgUrl: recipe.thumbnail)
 
         return .success
     }

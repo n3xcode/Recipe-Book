@@ -10,6 +10,19 @@ import CoreData
 final class RecipeRepository {
 
     private let context = CoreDataManager.shared.context
+    
+    func recipeExistsGlobally(recipeID: String) -> Bool {
+        let request: NSFetchRequest<RecipeEntity> = RecipeEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", recipeID)
+        
+        do {
+            let count = try context.count(for: request)
+            return count > 0
+        } catch {
+            print("Error checking global bookmarks: \(error)")
+            return false
+        }
+    }
 
     func recipeExists(recipeID: String, in bookID: UUID) -> Bool {
         let request: NSFetchRequest<RecipeEntity> = RecipeEntity.fetchRequest()
