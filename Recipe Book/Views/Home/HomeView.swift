@@ -11,6 +11,9 @@ struct HomeView: View {
 
     @StateObject private var vm: HomePageRecipeViewModel
     @StateObject private var searchVM: MealSearchViewModel
+    // navigation tracker
+    @StateObject private var nav = HomeNavigationState()
+    
     @State private var searchText: String = ""
 
     private var isOverlayActive: Bool {
@@ -50,15 +53,17 @@ struct HomeView: View {
                         spacing: 35
                     ) {
                         ForEach(vm.homeMeals) { meal in
-                            NavigationLink(
-                                destination: HomePageRecipeView(mealID: meal.id)
-                            ) {
+                            Button {
+                                // Use the new nav class
+                                nav.showMeal(id: meal.id)
+                            } label: {
                                 RecipeTileView(
                                     title: meal.title,
                                     subtitle: meal.area,
                                     imageName: meal.thumbnail
                                 )
                             }
+                            .buttonStyle(.plain)
                         }
 
                         if vm.homeMeals.isEmpty {
@@ -77,6 +82,7 @@ struct HomeView: View {
                 .padding(.top, 8)
             }
 
+            // Overlay for dismissal
             if !searchText.isEmpty {
                 Color.black
                     .opacity(0.001)
@@ -88,13 +94,19 @@ struct HomeView: View {
                     .zIndex(1)
             }
 
+            // Search Results Dropdown
             if !searchText.isEmpty {
                 SearchResultsDropdown(
                     meals: searchVM.results,
                     query: searchText,
-                    onSelect: { _ in
-                        searchText = ""
-                        searchVM.results = []
+                    onSelect: { meal in
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                        
+                        // links sheet via our nav class
+                        nav.showMeal(id: meal.id)
+                        
+                        self.searchText = ""
+                        self.searchVM.results = []
                     }
                 )
                 .padding(.horizontal)
@@ -103,6 +115,9 @@ struct HomeView: View {
             }
         }
         .navigationTitle("Home")
+        .sheet(item: $nav.selectedMeal) { item in
+            HomePageRecipeView(mealID: item.id)
+        }
         .refreshable {
             if !isOverlayActive {
                 await vm.refreshHomeMeals()
@@ -111,7 +126,6 @@ struct HomeView: View {
         .task {
             await vm.loadHomeMealsIfNeeded()
         }
-        Spacer()
     }
 }
 

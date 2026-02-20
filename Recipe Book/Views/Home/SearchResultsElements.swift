@@ -11,7 +11,7 @@ struct SearchResultsDropdown: View {
     
     let meals: [HomeMealPage]
     let query: String
-    let onSelect: (HomeMealPage) -> Void // parent handles clearing search
+    let onSelect: (HomeMealPage) -> Void
     
     var body: some View {
         List {
@@ -31,20 +31,23 @@ struct SearchResultsDropdown: View {
                     .listRowBackground(Color.clear)
                     
                 } else {
-                    NavigationLink(
-                        destination: HomePageRecipeView(mealID: meal.id)
-                            .onAppear {
-                                onSelect(meal)
-                            }
-                    ) {
+                    // --- UPDATED HERE ---
+                    // Replace NavigationLink with a Button
+                    Button {
+                        onSelect(meal)
+                    } label: {
                         SearchResultRow(meal: meal, query: query)
+                            // Makes the entire row area tappable
+                            .contentShape(Rectangle())
                     }
+                    .buttonStyle(.plain)
+                    // --------------------
                 }
             }
         }
         .listStyle(.plain)
         .frame(maxHeight: 280)
-        .scrollContentBackground(.hidden) // for custom background
+        .scrollContentBackground(.hidden)
         .background(Color(.systemBackground))
         .cornerRadius(12)
         .shadow(radius: 6)
