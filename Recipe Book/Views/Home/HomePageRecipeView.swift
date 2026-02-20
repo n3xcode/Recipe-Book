@@ -11,7 +11,7 @@ struct HomePageRecipeView: View {
     
     let mealID: String
     
-    // 1. Add the dismiss action from the environment
+    // Dismiss action from the environment
     @Environment(\.dismiss) var dismiss
     
     @StateObject private var vm = RecipeDetailViewModel()
@@ -25,10 +25,10 @@ struct HomePageRecipeView: View {
     private let saveCoordinator = SaveRecipeCoordinator()
     
     var body: some View {
-        // 2. Wrap in NavigationView so the toolbar is visible in the sheet
+
         NavigationView {
             ZStack {
-                // MARK: - Main Content
+
                 ScrollView {
                     if let recipe = vm.recipe {
                         
@@ -93,20 +93,22 @@ struct HomePageRecipeView: View {
                     )
                 }
             }
-            // 3. Update the toolbar to include the Close button
             .navigationTitle("Recipe")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                // Keep your bookmark button
+                // Bookmark button
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         showBookPicker = true
                     } label: {
+
                         Image(systemName: svImg.isBookmarked ? "bookmark.fill" : "bookmark")
+                            .foregroundColor(svImg.isBookmarked ? .yellow : .primary)
+                        
                     }
                 }
                 
-                // ADDED: Close button on the leading side
+                // Close button
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Close") {
                         dismiss()
@@ -115,6 +117,7 @@ struct HomePageRecipeView: View {
             }
             .task {
                 await vm.fetchRecipe(by: mealID)
+                // Check if already bookmarked on load (might not do it, could discourage repeat saves over different books)
             }
             .alert(
                 "Recipe already exists in this book. Save duplicate?",
@@ -137,13 +140,17 @@ struct HomePageRecipeView: View {
                     )
                     
                     svImg.saveImageToDisk(getRecipeImgUrl: thumbnailURL)
+                    
+                    // UI FIX: Update state immediately
+                    svImg.isBookmarked = true
+                    
                     showBookPicker = false
                 }
             }
         }
     }
     
-    // MARK: - Save Handler (Keeping your existing logic)
+    // MARK: - Save Handler
     private func handleSave(to book: BookEntity) {
         guard let thumbnailURL = vm.recipe?.thumbnail,
               let fileName = URL(string: thumbnailURL)?.lastPathComponent else {
@@ -163,9 +170,14 @@ struct HomePageRecipeView: View {
             
         case .success:
             svImg.saveImageToDisk(getRecipeImgUrl: thumbnailURL)
+            
+            // UI FIX: Force the icon to fill immediately
+            svImg.isBookmarked = true
+            
             showBookPicker = false
             
         case .failed:
+            // add an error if needed
             break
         }
     }
