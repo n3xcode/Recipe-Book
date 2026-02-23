@@ -82,6 +82,20 @@ final class RecipeRepository {
         }
     }
     
+    func deleteRecipe(_ recipe: RecipeEntity) {
+        let fileName = recipe.thumbnail ?? ""
+        let bookID = recipe.bookID ?? ""
+
+        // Delete the image from the subfolder
+        if !fileName.isEmpty && !bookID.isEmpty {
+            ImageStorageManager.shared.deleteImage(fileName: fileName, bookID: bookID)
+        }
+
+        // Delete from Core Data
+        context.delete(recipe)
+        save()
+    }
+    
     func fetchRecipes(for book: BookEntity) -> [RecipeEntity] {
         let request: NSFetchRequest<RecipeEntity> = RecipeEntity.fetchRequest()
         request.predicate = NSPredicate(format: "book == %@", book)

@@ -40,8 +40,10 @@ final class SaveRecipeCoordinator {
             thumbnailFileName: fileName
         )
 
-        // 2. Added 'await' here since saveImageToDisk is now async
-        await saveImgVM.saveImageToDisk(getRecipeImgUrl: recipe.thumbnail)
+        await saveImgVM.saveImageToDisk(
+            getRecipeImgUrl: recipe.thumbnail,
+            bookID: bookID.uuidString // Pass the ID here
+        )
 
         return .success
     }

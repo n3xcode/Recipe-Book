@@ -11,6 +11,7 @@ struct RecipeBookView: View {
 
     let book: BookEntity
     @StateObject private var vm: RecipeBookViewModel
+    @Environment(\.dismiss) private var dismiss
 
     init(book: BookEntity) {
         self.book = book
@@ -18,19 +19,42 @@ struct RecipeBookView: View {
     }
 
     var body: some View {
-        PageCurlView(
-            count: vm.recipes.count,
-            currentIndex: Binding(
-                get: { vm.currentIndex },
-                set: { vm.currentIndex = $0 }
-            )
-        ) { index in
-            RecipePageView(
-                recipe: vm.recipe(at: index),
-                image: vm.image(for: index)
-            )
+        ZStack {
+            PageCurlView(
+                count: vm.recipes.count,
+                currentIndex: $vm.currentIndex
+            ) { index in
+                Group {
+                    if let recipe = vm.recipe(at: index) {
+                        RecipePageView(
+                            recipe: recipe,
+                            image: vm.image(for: index)
+                        )
+                    } else {
+                        Color.clear
+                    }
+                }
+            }
         }
         .navigationBarTitle(book.name ?? "Untitled", displayMode: .inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Menu {
+                    Button(role: .destructive) {
+                        vm.deleteCurrentRecipe()
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                    }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                }
+            }
+        }
+        .onChange(of: vm.recipes.count) { newCount in
+            if newCount == 0 {
+                dismiss()
+            }
+        }
         .ignoresSafeArea()
     }
 }

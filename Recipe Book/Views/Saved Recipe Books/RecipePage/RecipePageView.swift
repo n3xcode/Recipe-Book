@@ -52,6 +52,7 @@ struct RecipePageView: View {
             }
             .padding()
         }
+        .background(Color(.systemBackground))
     }
     private func parseIngredients(_ recipe: RecipeEntity) -> [String] {
         let names = recipe.ingredientName?.components(separatedBy: "|") ?? []

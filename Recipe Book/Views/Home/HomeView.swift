@@ -11,7 +11,7 @@ struct HomeView: View {
 
     @StateObject private var vm: HomePageRecipeViewModel
     @StateObject private var searchVM: MealSearchViewModel
-    // navigation tracker
+
     @StateObject private var nav = HomeNavigationState()
     
     @State private var searchText: String = ""

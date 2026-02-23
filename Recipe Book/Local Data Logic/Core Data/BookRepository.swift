@@ -14,7 +14,7 @@ final class BookRepository: ObservableObject {
     // Fetch all books
     func fetchBooks() -> [BookEntity] {
         let request: NSFetchRequest<BookEntity> = BookEntity.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
 
         do {
             return try context.fetch(request)
@@ -42,8 +42,16 @@ final class BookRepository: ObservableObject {
 
     // Delete book
     func deleteBook(_ book: BookEntity) {
+        let bookIDString = book.id?.uuidString ?? ""
+        
+        // 1. Delete from Core Data (Cascade rule handles Recipe entities)
         context.delete(book)
         save()
+        
+        // 2. Wipe the entire folder for this book
+        if !bookIDString.isEmpty {
+            ImageStorageManager.shared.deleteBookFolder(bookID: bookIDString)
+        }
     }
 
     private func save() {

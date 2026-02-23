@@ -14,17 +14,30 @@ class ImageStorageManager {
     private init() {}
     
     private var documentsURL: URL {
-        FileManager.default.urls(for: .documentDirectory,
-                                 in: .userDomainMask)[0]
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
     
-    func fileURL(for fileName: String) -> URL {
-        documentsURL.appendingPathComponent(fileName)
+    // Get the folder for a specific book
+    func bookFolderURL(for bookID: String) -> URL {
+        return documentsURL.appendingPathComponent(bookID)
     }
     
-    func fileExists(fileName: String) -> Bool {
-        let path = fileURL(for: fileName).path
-        return FileManager.default.fileExists(atPath: path)
+    // Updated to include bookID
+    func fileURL(for fileName: String, bookID: String) -> URL {
+        return bookFolderURL(for: bookID).appendingPathComponent(fileName)
+    }
+    
+    // MARK: - Cleanup Methods
+    
+    func deleteImage(fileName: String, bookID: String) {
+        let url = fileURL(for: fileName, bookID: bookID)
+        try? FileManager.default.removeItem(at: url)
+    }
+    
+    func deleteBookFolder(bookID: String) {
+        let url = bookFolderURL(for: bookID)
+        try? FileManager.default.removeItem(at: url)
+        print("Deleted folder for book: \(bookID)")
     }
 }
 
@@ -40,23 +53,29 @@ final class SaveRecipeImg: ObservableObject {
     }
 
     // Changed to 'async'
-    func saveImageToDisk(getRecipeImgUrl: String) async {
+    func saveImageToDisk(getRecipeImgUrl: String, bookID: String) async {
         guard let url = URL(string: getRecipeImgUrl), !getRecipeImgUrl.isEmpty else { return }
         
         let fileName = url.lastPathComponent
-        let fileURL = ImageStorageManager.shared.fileURL(for: fileName)
-        
-        if ImageStorageManager.shared.fileExists(fileName: fileName) {
-            self.isBookmarked = true
-            return
-        }
+        let folderURL = ImageStorageManager.shared.bookFolderURL(for: bookID)
+        let fileURL = ImageStorageManager.shared.fileURL(for: fileName, bookID: bookID)
         
         do {
+            // Create the book folder if it doesn't exist yet
+            if !FileManager.default.fileExists(atPath: folderURL.path) {
+                try FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: true)
+            }
+            
+            // If file exists, return
+            if FileManager.default.fileExists(atPath: fileURL.path) {
+                self.isBookmarked = true
+                return
+            }
+            
             let (data, _) = try await URLSession.shared.data(from: url)
             try data.write(to: fileURL)
             
             ImageStorageManager.shared.addSkipBackupAttribute(to: fileURL)
-            
             self.isBookmarked = true
         } catch {
             print("Failed to save image: \(error)")

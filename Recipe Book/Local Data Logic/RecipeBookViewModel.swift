@@ -8,7 +8,10 @@
 import Foundation
 import UIKit
 
+@MainActor
 final class RecipeBookViewModel: ObservableObject {
+    
+    private var retryTask: Task<Void, Never>?
 
     @Published var currentIndex: Int = 0 {
         didSet { updateWindow() }
@@ -34,12 +37,33 @@ final class RecipeBookViewModel: ObservableObject {
         }
     }
 
-    func recipe(at index: Int) -> RecipeEntity {
-        recipes[index]
+    func recipe(at index: Int) -> RecipeEntity? {
+        guard index >= 0 && index < recipes.count else { return nil }
+        return recipes[index]
     }
 
     func image(for index: Int) -> UIImage? {
-        imageLoader.image(for: index)
+        guard index >= 0 && index < recipes.count else { return nil }
+
+        if let image = imageLoader.image(for: index) {
+            return image
+        }
+
+        // If image missing, retry shortly
+        retryImageLoad(after: 0.15)
+
+        return nil
+    }
+    
+    private func retryImageLoad(after delay: Double) {
+        retryTask?.cancel()
+
+        retryTask = Task {
+            try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+
+            updateWindow()
+            objectWillChange.send()
+        }
     }
 
     private func updateWindow() {
@@ -52,5 +76,40 @@ final class RecipeBookViewModel: ObservableObject {
             range: lower...upper,
             recipes: recipes
         )
+    }
+    
+    func deleteCurrentRecipe() {
+        guard !recipes.isEmpty else { return }
+
+        let deletingIndex = currentIndex
+        let recipeToDelete = recipes[deletingIndex]
+
+        repository.deleteRecipe(recipeToDelete)
+
+        let updatedRecipes = repository.fetchRecipes(for: book)
+
+        // If book is now empty → update state and return
+        if updatedRecipes.isEmpty {
+            recipes = []
+            currentIndex = 0
+            return
+        }
+
+        // Decide where to move BEFORE assigning recipes
+        var newIndex = deletingIndex
+
+        if deletingIndex > 0 {
+            newIndex = deletingIndex - 1
+        } else {
+            newIndex = 0
+        }
+
+        // Assign recipes
+        recipes = updatedRecipes
+
+        // Clamp index safely
+        currentIndex = min(newIndex, recipes.count - 1)
+
+        updateWindow()
     }
 }
