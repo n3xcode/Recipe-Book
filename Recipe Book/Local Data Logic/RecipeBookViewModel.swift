@@ -42,16 +42,31 @@ final class RecipeBookViewModel: ObservableObject {
         return recipes[index]
     }
 
-    func image(for index: Int) -> UIImage? {
-        guard index >= 0 && index < recipes.count else { return nil }
+    func image(for index: Int, recipes: [RecipeEntity]) -> UIImage? {
+        // Safety guard
+        guard recipes.indices.contains(index) else { return nil }
 
-        if let image = imageLoader.image(for: index) {
+        // Try cache first
+        if let image = imageLoader.image(for: index, recipes: Array(recipes)) {
             return image
         }
 
-        // If image missing, retry shortly
-        retryImageLoad(after: 0.15)
+        // Attempt to load immediately from disk if missing
+        let recipe = recipes[index]
+        if let fileName = recipe.thumbnail,
+           let bookID = recipe.bookID,
+           let image = imageLoader.loadImage(fileName: fileName, bookID: bookID) {
+            // Cache it for future requests
+            imageLoader.cache[index] = image
+            return image
+        }
 
+        // Schedule a short retry asynchronously
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
+            self?.objectWillChange.send() // Trigger SwiftUI update
+        }
+
+        // Still return nil for now; SwiftUI will refresh soon
         return nil
     }
     

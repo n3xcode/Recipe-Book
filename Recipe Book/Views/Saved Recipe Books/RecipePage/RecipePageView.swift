@@ -38,7 +38,7 @@ struct RecipePageView: View {
                     .font(.title2)
                     .fontWeight(.semibold)
 
-                ForEach(parseIngredients(recipe), id: \.self) { item in
+                ForEach(Array(parseIngredients(recipe).enumerated()), id: \.offset) { index, item in
                     Text("• \(item)")
                 }
 

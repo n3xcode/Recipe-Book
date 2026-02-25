@@ -56,45 +56,48 @@ struct PageCurlView<Page: View>: UIViewControllerRepresentable {
     }
 
     func updateUIViewController(_ uiViewController: UIPageViewController, context: Context) {
-
         guard count > 0 else { return }
-
-        // If count changed (deletion), wipe cached controllers
-        if context.coordinator.controllers.count != count {
-            context.coordinator.controllers.removeAll()
-        }
 
         let safeIndex = max(0, min(currentIndex, count - 1))
         let visibleVC = uiViewController.viewControllers?.first as? IndexedHostingController<Page>
 
-        if visibleVC?.pageIndex != safeIndex {
-            let currentVC = context.coordinator.controller(for: safeIndex)
+        // Only update if index really changed
+        guard visibleVC?.pageIndex != safeIndex else { return }
 
-            let direction: UIPageViewController.NavigationDirection =
-                (visibleVC?.pageIndex ?? -1) < safeIndex ? .forward : .reverse
+        let currentVC = context.coordinator.controller(for: safeIndex)
 
-            uiViewController.setViewControllers([currentVC], direction: direction, animated: true)
-        }
+        // Use the safe method to handle transitions
+        context.coordinator.setViewControllerSafely(uiViewController, to: safeIndex)
+
+        // Clean up controllers that are out of bounds
+        let keysToRemove = context.coordinator.controllers.keys.filter { $0 >= count }
+        for key in keysToRemove { context.coordinator.controllers.removeValue(forKey: key) }
     }
 
     // MARK: - Coordinator
 
-    class Coordinator: NSObject, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+    final class Coordinator: NSObject, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
 
         var parent: PageCurlView
         var controllers: [Int: IndexedHostingController<Page>] = [:]
+
+        // lock to prevent overlapping transitions
+        private var isTransitioning = false
+        private var pendingIndex: Int? = nil
 
         init(parent: PageCurlView) {
             self.parent = parent
         }
 
+        // MARK: - Controller management
         func controller(for index: Int) -> IndexedHostingController<Page> {
-
             guard index >= 0 && index < parent.count else {
                 fatalError("Invalid page index: \(index)")
             }
 
             if let existing = controllers[index] {
+                // Always refresh content in case data changed
+                existing.rootView = parent.content(index)
                 return existing
             }
 
@@ -102,23 +105,18 @@ struct PageCurlView<Page: View>: UIViewControllerRepresentable {
                 pageIndex: index,
                 rootView: parent.content(index)
             )
-
             controllers[index] = hosting
             return hosting
         }
 
-        // MARK: DataSource
-
+        // MARK: - UIPageViewController DataSource
         func pageViewController(
             _ pageViewController: UIPageViewController,
             viewControllerBefore viewController: UIViewController
         ) -> UIViewController? {
-            
             guard let currentVC = viewController as? IndexedHostingController<Page> else { return nil }
-            
             let index = currentVC.pageIndex
-            guard index > 0 else { return nil } // Correctly stops user from going past index 0
-
+            guard index > 0 else { return nil }
             return controller(for: index - 1)
         }
 
@@ -126,18 +124,14 @@ struct PageCurlView<Page: View>: UIViewControllerRepresentable {
             _ pageViewController: UIPageViewController,
             viewControllerAfter viewController: UIViewController
         ) -> UIViewController? {
-
             guard let currentVC = viewController as? IndexedHostingController<Page> else { return nil }
-            
             let index = currentVC.pageIndex
             let nextIndex = index + 1
             guard nextIndex >= 0 && nextIndex < parent.count else { return nil }
-            
             return controller(for: nextIndex)
         }
 
-        // MARK: Delegate
-
+        // MARK: - UIPageViewController Delegate
         func pageViewController(
             _ pageViewController: UIPageViewController,
             didFinishAnimating finished: Bool,
@@ -145,12 +139,49 @@ struct PageCurlView<Page: View>: UIViewControllerRepresentable {
             transitionCompleted completed: Bool
         ) {
             guard completed,
-                  let visible = pageViewController.viewControllers?.first as? IndexedHostingController<Page>
-            else { return }
+                  let visible = pageViewController.viewControllers?.first as? IndexedHostingController<Page> else { return }
 
-            // Update SwiftUI state asynchronously to avoid UI warnings
+            // Release transition lock
+            isTransitioning = false
+
+            // Update SwiftUI state
             DispatchQueue.main.async {
                 self.parent.currentIndex = visible.pageIndex
+            }
+
+            // Apply any pending page request
+            if let pending = pendingIndex, pending != visible.pageIndex {
+                pendingIndex = nil
+                setViewControllerSafely(pageViewController, to: pending)
+            }
+
+            // Cleanup controllers out of bounds
+            let keysToRemove = controllers.keys.filter { $0 >= parent.count }
+            for key in keysToRemove { controllers.removeValue(forKey: key) }
+        }
+
+        // MARK: - Safe programmatic page setter
+        func setViewControllerSafely(_ pageVC: UIPageViewController, to index: Int) {
+            guard index >= 0 && index < parent.count else { return }
+
+            guard let visibleVC = pageVC.viewControllers?.first as? IndexedHostingController<Page> else { return }
+            if visibleVC.pageIndex == index { return } // Already on desired page
+
+            if isTransitioning {
+                // Save latest request to apply after current transition
+                pendingIndex = index
+                return
+            }
+
+            isTransitioning = true
+
+            let currentVC = controller(for: index)
+            let direction: UIPageViewController.NavigationDirection =
+                (visibleVC.pageIndex < index) ? .forward : .reverse
+
+            // Dispatch async to avoid overlapping run loop calls
+            DispatchQueue.main.async {
+                pageVC.setViewControllers([currentVC], direction: direction, animated: true)
             }
         }
     }

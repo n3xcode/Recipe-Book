@@ -8,40 +8,50 @@
 import Foundation
 import UIKit
 
-final class ImageWindowLoader: ObservableObject{
+final class ImageWindowLoader: ObservableObject {
 
-    private var cache: [Int: UIImage] = [:]
+    var cache: [Int: UIImage] = [:]
 
-    func image(for index: Int) -> UIImage? {
-        cache[index]
+    func image(for index: Int, recipes: [RecipeEntity]) -> UIImage? {
+        if let img = cache[index] {
+            return img
+        }
+
+        // Lazy load immediately if missing
+        guard index < recipes.count else { return nil }
+        let recipe = recipes[index]
+
+        if let fileName = recipe.thumbnail,
+           let bookID = recipe.bookID,
+           let img = loadImage(fileName: fileName, bookID: bookID) {
+            cache[index] = img
+            return img
+        }
+
+        return nil
     }
 
     func updateWindow(range: ClosedRange<Int>, recipes: [RecipeEntity]) {
+        // Remove out-of-window images
+        cache.keys.filter { !range.contains($0) }.forEach { cache.removeValue(forKey: $0) }
 
-        // remove images outside the current window to save RAM
-        cache.keys
-            .filter { !range.contains($0) }
-            .forEach { cache.removeValue(forKey: $0) }
-
-        // load missing images inside the window
+        // Load images in window asynchronously
         for index in range {
-            guard index < recipes.count else { continue } // Safety check
+            guard index < recipes.count else { continue }
             guard cache[index] == nil else { continue }
 
             let recipe = recipes[index]
 
-            // filename and the bookID to the loader
             if let fileName = recipe.thumbnail,
-               let bookID = recipe.bookID, // Extracting the folder name
+               let bookID = recipe.bookID,
                let image = loadImage(fileName: fileName, bookID: bookID) {
                 cache[index] = image
             }
         }
     }
 
-    private func loadImage(fileName: String, bookID: String) -> UIImage? {
+    func loadImage(fileName: String, bookID: String) -> UIImage? {
         let url = ImageStorageManager.shared.fileURL(for: fileName, bookID: bookID)
-        
         return UIImage(contentsOfFile: url.path)
     }
 }

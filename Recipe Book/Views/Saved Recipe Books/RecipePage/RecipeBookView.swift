@@ -39,7 +39,7 @@ struct RecipeBookView: View {
                         if recipes.indices.contains(index) {
                             RecipePageView(
                                 recipe: recipes[index],
-                                image: imageLoader.image(for: index)
+                                image: imageLoader.image(for: index, recipes: Array(recipes))
                             )
                         } else {
                             Color.clear
@@ -49,7 +49,10 @@ struct RecipeBookView: View {
             }
         }
         .onAppear {
-            updateImageWindow()
+            updateImageWindow() // preload 0...1
+            if recipes.indices.contains(0) {
+                _ = imageLoader.image(for: 0, recipes: Array(recipes)) // force first image load
+            }
         }
         .onChange(of: currentIndex) { _ in
             updateImageWindow()
