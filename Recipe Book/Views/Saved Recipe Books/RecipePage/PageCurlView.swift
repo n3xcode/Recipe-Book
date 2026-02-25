@@ -64,8 +64,6 @@ struct PageCurlView<Page: View>: UIViewControllerRepresentable {
         // Only update if index really changed
         guard visibleVC?.pageIndex != safeIndex else { return }
 
-        let currentVC = context.coordinator.controller(for: safeIndex)
-
         // Use the safe method to handle transitions
         context.coordinator.setViewControllerSafely(uiViewController, to: safeIndex)
 

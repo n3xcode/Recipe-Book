@@ -106,3 +106,33 @@ final class RecipeRepository {
         return (try? context.fetch(request)) ?? []
     }
 }
+
+extension RecipeRepository {
+    /// Combines duplicate ingredients so duplicates are counted and annotated
+    func combinedIngredients(_ recipe: RecipeEntity) -> [String] {
+        let names = recipe.ingredientName?.components(separatedBy: "|") ?? []
+        let measures = recipe.ingredientMeasure?.components(separatedBy: "|") ?? []
+        
+        var combined: [String: Int] = [:]
+        var display: [String] = []
+        
+        for (name, measure) in zip(names, measures) {
+            let key = "\(measure) \(name)"
+            if let count = combined[key] {
+                combined[key] = count + 1
+            } else {
+                combined[key] = 1
+            }
+        }
+        
+        for (key, count) in combined {
+            if count > 1 {
+                display.append("\(key) x\(count)")
+            } else {
+                display.append(key)
+            }
+        }
+        
+        return display
+    }
+}
