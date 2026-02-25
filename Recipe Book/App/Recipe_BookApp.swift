@@ -9,9 +9,16 @@ import SwiftUI
 
 @main
 struct Recipe_BookApp: App {
+
+    let persistenceController = CoreDataManager.shared
+
     var body: some Scene {
         WindowGroup {
             RootView()
+                .environment(
+                    \.managedObjectContext,
+                    persistenceController.context
+                )
         }
     }
 }

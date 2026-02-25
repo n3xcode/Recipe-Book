@@ -90,13 +90,11 @@ struct PageCurlView<Page: View>: UIViewControllerRepresentable {
 
         func controller(for index: Int) -> IndexedHostingController<Page> {
 
-            // Hard guard against invalid indexes
             guard index >= 0 && index < parent.count else {
-                fatalError("Attempted to access invalid page index: \(index)")
+                fatalError("Invalid page index: \(index)")
             }
 
             if let existing = controllers[index] {
-                existing.rootView = parent.content(index)
                 return existing
             }
 

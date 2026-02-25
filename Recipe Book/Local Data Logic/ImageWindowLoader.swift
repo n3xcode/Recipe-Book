@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-final class ImageWindowLoader {
+final class ImageWindowLoader: ObservableObject{
 
     private var cache: [Int: UIImage] = [:]
 

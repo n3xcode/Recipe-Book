@@ -10,7 +10,14 @@ import SwiftUI
 
 struct SavedRecipesView: View {
 
-    @StateObject private var vm = SavedBooksViewModel()
+    //@StateObject private var vm = SavedBooksViewModel()
+    @Environment(\.managedObjectContext) private var context
+
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \BookEntity.date, ascending: true)],
+        animation: .default
+    )
+    private var books: FetchedResults<BookEntity>
 
     @State private var showAddAlert = false
     @State private var showEditAlert = false
@@ -22,7 +29,7 @@ struct SavedRecipesView: View {
             List {
                 Section(header: Text("My Recipe Books")) {
 
-                    ForEach(vm.books, id: \.objectID) { book in
+                    ForEach(books) { book in
 
                         NavigationLink {
                             RecipeBookView(book: book)
@@ -46,7 +53,8 @@ struct SavedRecipesView: View {
 
                             // Delete
                             Button(role: .destructive) {
-                                vm.deleteBook(book)
+                                context.delete(book)
+                                try? context.save()
                             } label: {
                                 Label("Delete", systemImage: "trash")
                             }
@@ -66,9 +74,9 @@ struct SavedRecipesView: View {
                     }
                 }
             }
-            .onAppear {
-                vm.loadBooks()
-            }
+//            .onAppear {
+//                vm.loadBooks()
+//            }
             
             // MARK: - Add Book Alert
             if showAddAlert {
@@ -82,7 +90,13 @@ struct SavedRecipesView: View {
                     onConfirm: {
                         let trimmed = newBookName.trimmingCharacters(in: .whitespaces)
                         guard !trimmed.isEmpty else { return }
-                        vm.addBook(name: trimmed)
+
+                        let book = BookEntity(context: context)
+                        book.id = UUID()
+                        book.name = trimmed
+                        book.date = Date()
+
+                        try? context.save()
                         showAddAlert = false
                     }
                 )
@@ -99,7 +113,8 @@ struct SavedRecipesView: View {
                     },
                     onConfirm: {
                         if let selectedBook {
-                            vm.updateBook(selectedBook, name: newBookName)
+                            selectedBook.name = newBookName
+                            try? context.save()
                         }
                         showEditAlert = false
                     }
