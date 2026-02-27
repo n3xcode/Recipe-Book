@@ -8,3 +8,4 @@
 import Foundation
 
 // WIP save user info and session info to local data
+class UserStettings{}
